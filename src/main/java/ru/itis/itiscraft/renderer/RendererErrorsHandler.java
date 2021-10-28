@@ -3,7 +3,7 @@ package ru.itis.itiscraft.renderer;
 import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
 import static org.lwjgl.opengl.GL11.glGetError;
 
-public class RendererErrorsHandler {
+class RendererErrorsHandler {
     static void checkForErrorsAndPrint() {
         int error = glGetError();
         if (error != GL_NO_ERROR) {

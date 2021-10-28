@@ -1,6 +1,9 @@
 package ru.itis.itiscraft.gamelogic;
 
+import ru.itis.itiscraft.events.Events;
 import ru.itis.itiscraft.gamelogic.components.Transform;
+import ru.itis.itiscraft.renderer.Renderer;
+import ru.itis.itiscraft.window.Window;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,8 +12,14 @@ public class Entity {
     private final Set<Component> components;
     private final Set<Entity> childEntities;
     private final Transform transform;
+    private final Window window;
+    private final Events events;
+    private final Renderer renderer;
 
-    Entity() {
+    public Entity(Window window, Events events, Renderer renderer) {
+        this.window = window;
+        this.events = events;
+        this.renderer = renderer;
         components = new HashSet<>();
         childEntities = new HashSet<>();
         transform = new Transform();
@@ -71,13 +80,27 @@ public class Entity {
     }
 
     public void update(long deltaTime) {
+        // Обновить дочерние сущности
         for(Entity entity: childEntities) {
             entity.update(deltaTime);
         }
+        // Обновить все компонеты у этой сущности
         for(Component component: components) {
             if(component.isActive) {
                 component.update(deltaTime);
             }
         }
+    }
+
+    public Renderer getRenderer() {
+        return renderer;
+    }
+
+    public Window getWindow() {
+        return window;
+    }
+
+    public Events getEvents() {
+        return events;
     }
 }

@@ -11,12 +11,12 @@ import java.util.Map;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL20.*;
 
-class Shader {
+public class Shader {
     private final int programId;
 
     private final Map<String, Integer> uniformLocationCache;
 
-    Shader(String vertexPath, String fragmentPath) {
+    public Shader(String vertexPath, String fragmentPath) {
         String vertexCode = Utils.readFromFile(vertexPath);
         String fragmentCode = Utils.readFromFile(fragmentPath);
 
@@ -45,19 +45,19 @@ class Shader {
         uniformLocationCache = new HashMap<>();
     }
 
-    void delete() {
+    public void delete() {
         glDeleteProgram(programId);
     }
 
-    void use() {
+    public void use() {
         glUseProgram(programId);
     }
 
-    void setUniform(String name, int value) {
+    public void setUniform(String name, int value) {
         glUniform1i(getUniformLocation(name), value);
     }
 
-    void setUniform(String name, Vector2f value) {
+    public void setUniform(String name, Vector2f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(2);
             value.get(buffer);
@@ -65,7 +65,7 @@ class Shader {
         }
     }
 
-    void setUniform(String name, Vector3f value) {
+    public void setUniform(String name, Vector3f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(3);
             value.get(buffer);
@@ -73,7 +73,7 @@ class Shader {
         }
     }
 
-    void setUniform(String name, Vector4f value) {
+    public void setUniform(String name, Vector4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(4);
             value.get(buffer);
@@ -81,7 +81,7 @@ class Shader {
         }
     }
 
-    void setUniform(String name, Matrix2f value) {
+    public void setUniform(String name, Matrix2f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(2 * 2);
             value.get(buffer);
@@ -89,7 +89,7 @@ class Shader {
         }
     }
 
-    void setUniform(String name, Matrix3f value) {
+    public void setUniform(String name, Matrix3f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(3 * 3);
             value.get(buffer);
@@ -97,7 +97,7 @@ class Shader {
         }
     }
 
-    void setUniform(String name, Matrix4f value) {
+    public void setUniform(String name, Matrix4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(4 * 4);
             value.get(buffer);

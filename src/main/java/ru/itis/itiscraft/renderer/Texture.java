@@ -11,12 +11,12 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 import static org.lwjgl.stb.STBImage.*;
 
-class Texture {
+public class Texture {
     private final int id;
     private final int width;
     private final int height;
 
-    Texture(String path) {
+    public Texture(String path) {
         id = glGenTextures();
         ByteBuffer image;
         int channels;
@@ -62,12 +62,12 @@ class Texture {
         stbi_image_free(image);
     }
 
-    void bind() {
+    public void bind() {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
-    void delete() {
+    public void delete() {
         glDeleteTextures(id);
     }
 }

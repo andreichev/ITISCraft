@@ -1,10 +1,20 @@
 package ru.itis.itiscraft.gamelogic;
 
+import ru.itis.itiscraft.events.Events;
+import ru.itis.itiscraft.renderer.Renderer;
+import ru.itis.itiscraft.window.Window;
+
 public class World {
     private final Entity root;
+    private final Window window;
+    private final Events events;
+    private final Renderer renderer;
 
-    public World() {
-        root = new Entity();
+    public World(Window window, Events events, Renderer renderer) {
+        this.window = window;
+        this.events = events;
+        this.renderer = renderer;
+        root = new Entity(window, events, renderer);
     }
 
     public void initialize() {
@@ -19,11 +29,14 @@ public class World {
         root.update(deltaTime);
     }
 
-    public void instantiate(Entity entity) {
+    public Entity instantiate() {
+        Entity entity = new Entity(window, events, renderer);
         root.addChildEntity(entity);
+        return entity;
     }
 
     public void destroy(Entity entity) {
+        entity.terminate();
         root.removeEntity(entity);
     }
 }

@@ -6,11 +6,11 @@ import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL15.*;
 
-class VertexBuffer {
+public class VertexBuffer {
     private final int id;
     private final VertexBufferLayout layout;
 
-    VertexBuffer(Vertex[] vertices) {
+    public VertexBuffer(Vertex[] vertices) {
         id = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, id);
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -30,11 +30,11 @@ class VertexBuffer {
         layout.initializeForRenderer();
     }
 
-    void bind() {
+    public void bind() {
         layout.bind();
     }
 
-    void delete() {
+    public void delete() {
         layout.delete();
         glDeleteBuffers(id);
     }
