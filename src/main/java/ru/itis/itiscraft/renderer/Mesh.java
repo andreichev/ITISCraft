@@ -1,8 +1,10 @@
 package ru.itis.itiscraft.renderer;
 
+import ru.itis.itiscraft.gamelogic.Component;
+
 import static org.lwjgl.opengl.GL11.*;
 
-class Mesh {
+class Mesh extends Component {
     private final IndexBuffer indexBuffer;
     private final VertexBuffer vertexBuffer;
     private final Texture texture;
@@ -14,16 +16,20 @@ class Mesh {
         vertexBuffer.bind();
     }
 
-    void draw() {
-        texture.bind();
-        indexBuffer.bind();
-        vertexBuffer.bind();
-        glDrawElements(GL_TRIANGLES, indexBuffer.getSize(), GL_UNSIGNED_INT, 0);
-    }
-
     void delete() {
         texture.delete();
         indexBuffer.delete();
         vertexBuffer.delete();
+    }
+
+    @Override
+    public void initialize() {}
+
+    @Override
+    public void update(long deltaTime) {
+        texture.bind();
+        indexBuffer.bind();
+        vertexBuffer.bind();
+        glDrawElements(GL_TRIANGLES, indexBuffer.getSize(), GL_UNSIGNED_INT, 0);
     }
 }

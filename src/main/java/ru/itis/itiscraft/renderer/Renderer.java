@@ -80,14 +80,11 @@ public class Renderer {
         model = model.translate(0.f, 0.f, 0.f);
         view.identity();
         projection = projection.perspective(45.f, 1.0f, 0.1f, 1000.0f);
+        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
     }
 
     public void setView(Matrix4f view) {
         this.view = view;
-    }
-
-    public void setClearColor(float r, float g, float b, float a) {
-        glClearColor(r, g, b, a);
     }
 
     public void clear() {
@@ -100,7 +97,7 @@ public class Renderer {
         baseShader.setUniform("view", view);
         baseShader.setUniform("model", model);
         baseShader.setUniform("projection", projection);
-        mesh.draw();
+        mesh.update(1);
         RendererErrorsHandler.checkForErrorsAndPrint();
     }
 

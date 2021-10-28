@@ -1,23 +1,20 @@
-package ru.itis.itiscraft.renderer;
+package ru.itis.itiscraft.gamelogic.components;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
+import ru.itis.itiscraft.gamelogic.Component;
 import ru.itis.itiscraft.gamelogic.Direction;
 
-public class Camera {
-    private final Matrix4f rotation;
+public class Camera extends Component {
+    private final Matrix4f rotationMatrix;
+    private final Vector3f rotation;
     private final Vector4f position;
     private final Vector4f front;
     private final Vector4f target;
     private final Vector4f up;
     private final Vector4f right;
     private final Matrix4f view;
-    private float rotationX;
-    private float rotationY;
-
-    private static final Vector4f unitUp = new Vector4f(0.f, 1.f, 0.f, 1.f);
-    private static final Vector4f unitForward = new Vector4f(0.f, 0.f, -1.f, 1.f);
-    private static final Vector4f unitRight = new Vector4f(1.f, 0.f, 0.f, 1.f);
 
     public Camera(float x, float y, float z) {
         position = new Vector4f(x, y, z, 1.f);
@@ -25,20 +22,19 @@ public class Camera {
         front = new Vector4f();
         up = new Vector4f();
         right = new Vector4f();
-        rotation = new Matrix4f();
+        rotationMatrix = new Matrix4f();
         view = new Matrix4f();
-        rotationX = 0.f;
-        rotationY = 0.f;
+        rotation = new Vector3f();
         updateVectors();
     }
 
     public void applyMouseMove(float deltaX, float deltaY) {
-        rotationX += deltaY;
-        rotationY += deltaX;
-        rotation.identity();
-        rotation.rotate(rotationX, 1.f, 0.f, 0.f);
-        rotation.rotate(rotationY, 0.f, 1.f, 0.f);
-        rotation.transpose();
+        rotation.x += deltaY;
+        rotation.y += deltaX;
+        rotationMatrix.identity();
+        rotationMatrix.rotate(rotation.x, 1.f, 0.f, 0.f);
+        rotationMatrix.rotate(rotation.y, 0.f, 1.f, 0.f);
+        rotationMatrix.transpose();
         updateVectors();
     }
 
@@ -72,10 +68,10 @@ public class Camera {
 
     private void updateVectors() {
         // front = rotation * unitForward
-        unitForward.mul(rotation, front);
+        Direction.unitForward.mul(rotationMatrix, front);
         // right = rotation * unitRight
-        unitRight.mul(rotation, right);
+        Direction.unitRight.mul(rotationMatrix, right);
         // up = rotation * unitUp
-        unitUp.mul(rotation, up);
+        Direction.unitUp.mul(rotationMatrix, up);
     }
 }

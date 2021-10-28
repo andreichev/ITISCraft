@@ -4,7 +4,8 @@ import ru.itis.itiscraft.events.Events;
 import ru.itis.itiscraft.events.Key;
 import ru.itis.itiscraft.events.impl.EventsGlfwImpl;
 import ru.itis.itiscraft.gamelogic.Direction;
-import ru.itis.itiscraft.renderer.Camera;
+import ru.itis.itiscraft.gamelogic.World;
+import ru.itis.itiscraft.gamelogic.components.Camera;
 import ru.itis.itiscraft.renderer.Renderer;
 import ru.itis.itiscraft.window.Window;
 import ru.itis.itiscraft.window.impl.WindowGlfwImpl;
@@ -15,8 +16,10 @@ public class Application {
 
     private final Window window;
     private final Events events;
-    private final Renderer renderer = new Renderer();
+    private final Renderer game = new Renderer();
     private final Camera camera = new Camera(0.f, 0.f, 30.f);
+
+    private final World world = new World();
 
     public Application() {
         WindowGlfwImpl windowGlfw = new WindowGlfwImpl();
@@ -24,8 +27,7 @@ public class Application {
         window.initialize("Hello, world!", WIDTH, HEIGHT, false);
         events = new EventsGlfwImpl(windowGlfw.getWindowHandle());
         events.initialize();
-        renderer.initialize();
-        renderer.setClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        game.initialize();
     }
 
     public void run() {
@@ -35,22 +37,22 @@ public class Application {
 
     private void loop() {
         while (window.isShouldClose() == false) {
-            renderer.clear();
+            game.clear();
             if(events.isKeyPressed(Key.ESCAPE)) {
                 window.setShouldClose(true);
             }
 
             if(events.isKeyPressed(Key.W)) {
-                camera.move(Direction.Forward, 1.f);
+                camera.move(Direction.Forward, 0.1f);
             }
             if(events.isKeyPressed(Key.S)) {
-                camera.move(Direction.Backward, 1.f);
+                camera.move(Direction.Backward, 0.1f);
             }
             if(events.isKeyPressed(Key.A)) {
-                camera.move(Direction.Left, 1.f);
+                camera.move(Direction.Left, 0.1f);
             }
             if(events.isKeyPressed(Key.D)) {
-                camera.move(Direction.Right, 1.f);
+                camera.move(Direction.Right, 0.1f);
             }
             if(events.isKeyJustPressed(Key.TAB)) {
                 events.toggleCursorLock();
@@ -58,10 +60,8 @@ public class Application {
 
             camera.applyMouseMove(events.getDeltaX() * 0.01f, events.getDeltaY() * 0.01f);
 
-            renderer.setView(camera.getView());
-            // renderer.setView(new Matrix4f());
-            // render, game logic
-            renderer.render();
+            game.setView(camera.getView());
+            game.render();
 
             window.swapBuffers();
             events.pollEvents();
@@ -70,6 +70,6 @@ public class Application {
 
     private void terminate() {
         window.terminate();
-        renderer.terminate();
+        game.terminate();
     }
 }
