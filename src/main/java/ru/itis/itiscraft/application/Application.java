@@ -46,13 +46,13 @@ public class Application {
         );
 
         Entity cube1 = world.instantiate();
-        Texture texture1 = new Texture("src/main/resources/textures/block.png");
+        Texture texture1 = new Texture("src/main/resources/textures/oak_planks.png");
         Mesh mesh1 = new Mesh(Primitives.createCube(8.f), texture1, baseShader);
         cube1.addComponent(mesh1);
 
         Entity cube2 = world.instantiate();
-        Texture texture2 = new Texture("src/main/resources/textures/block.png");
-        Mesh mesh2 = new Mesh(Primitives.createCube(4.f), texture2, baseShader);
+        Texture texture2 = new Texture("src/main/resources/textures/stone.png");
+        Mesh mesh2 = new Mesh(Primitives.createCube(8.f), texture2, baseShader);
         cube2.addComponent(mesh2);
         cube2.getTransform().move(Direction.Forward, 10);
 
