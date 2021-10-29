@@ -8,7 +8,10 @@ public interface Events {
     boolean isKeyJustPressed(Key key);
     boolean isMouseButtonClicked(MouseButton button);
     boolean isMouseButtonJustClicked(MouseButton button);
+    boolean isCursorLocked();
     void toggleCursorLock();
+    void addWindowSizeDelegate(WindowSizeDelegate delegate);
+    void removeWindowSizeDelegate(WindowSizeDelegate delegate);
     float getDeltaX();
     float getDeltaY();
 }

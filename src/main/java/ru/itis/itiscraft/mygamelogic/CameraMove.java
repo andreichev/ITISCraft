@@ -2,6 +2,7 @@ package ru.itis.itiscraft.mygamelogic;
 
 import ru.itis.itiscraft.events.Events;
 import ru.itis.itiscraft.events.Key;
+import ru.itis.itiscraft.events.WindowSizeDelegate;
 import ru.itis.itiscraft.gamelogic.Component;
 import ru.itis.itiscraft.gamelogic.Direction;
 import ru.itis.itiscraft.gamelogic.components.Transform;
@@ -33,6 +34,8 @@ public class CameraMove extends Component {
         if(events.isKeyPressed(Key.D)) {
             transform.move(Direction.Right, moveSpeed * deltaTime);
         }
-        transform.rotate(events.getDeltaY() * mouseSpeed * deltaTime, events.getDeltaX() * 0.01f, 0.f);
+        if (events.isCursorLocked()) {
+            transform.rotate(events.getDeltaY() * mouseSpeed * deltaTime, events.getDeltaX() * 0.01f, 0.f);
+        }
     }
 }

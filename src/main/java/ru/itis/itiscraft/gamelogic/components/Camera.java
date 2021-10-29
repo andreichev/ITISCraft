@@ -3,12 +3,14 @@ package ru.itis.itiscraft.gamelogic.components;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import org.joml.Math;
+import ru.itis.itiscraft.events.WindowSizeDelegate;
 import ru.itis.itiscraft.gamelogic.Component;
 
-public class Camera extends Component {
+public class Camera extends Component implements WindowSizeDelegate {
     private final Vector4f target;
     private final Matrix4f view;
     private final Matrix4f projection;
+    private float fieldOfView = 90.f;
 
     private Transform transform;
 
@@ -16,12 +18,18 @@ public class Camera extends Component {
         target = new Vector4f();
         view = new Matrix4f();
         projection = new Matrix4f();
-        projection.perspective(Math.toRadians(90.f), 1.0f, 0.1f, 1000.0f);
+        projection.perspective(Math.toRadians(fieldOfView), 1.0f, 0.1f, 1000.0f);
     }
 
     @Override
     public void initialize() {
         transform = getEntity().getTransform();
+        getEntity().getEvents().addWindowSizeDelegate(this);
+    }
+
+    @Override
+    public void terminate() {
+        getEntity().getEvents().removeWindowSizeDelegate(this);
     }
 
     public Matrix4f getView() {
@@ -41,5 +49,11 @@ public class Camera extends Component {
 
     public Matrix4f getProjection() {
         return projection;
+    }
+
+    @Override
+    public void sizeChanged(int width, int height) {
+        projection.identity();
+        projection.perspective(Math.toRadians(fieldOfView), (float) width / height, 0.1f, 1000.0f);
     }
 }

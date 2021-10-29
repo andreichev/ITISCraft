@@ -1,11 +1,12 @@
 package ru.itis.itiscraft.events.impl;
 
-import org.lwjgl.glfw.GLFWCursorPosCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import ru.itis.itiscraft.events.Events;
 import ru.itis.itiscraft.events.Key;
 import ru.itis.itiscraft.events.MouseButton;
+import ru.itis.itiscraft.events.WindowSizeDelegate;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -20,6 +21,7 @@ public class EventsGlfwImpl implements Events {
     private boolean cursorLocked = false;
     private boolean cursorStarted = false;
     private final long windowHandle;
+    private final Set<WindowSizeDelegate> windowSizeDelegates = new HashSet<>();
 
     private final int MOUSE_BUTTONS = 1024;
 
@@ -52,6 +54,11 @@ public class EventsGlfwImpl implements Events {
             keys[MOUSE_BUTTONS + button] = action == GLFW_PRESS || action == GLFW_REPEAT;
             frames[MOUSE_BUTTONS + button] = current;
         });
+        glfwSetWindowSizeCallback(windowHandle, (long window, int width, int height) -> {
+            for(WindowSizeDelegate delegate: windowSizeDelegates) {
+                delegate.sizeChanged(width, height);
+            }
+        });
     }
 
     @Override
@@ -83,8 +90,14 @@ public class EventsGlfwImpl implements Events {
     }
 
     @Override
+    public boolean isCursorLocked() {
+        return cursorLocked;
+    }
+
+    @Override
     public void toggleCursorLock() {
         cursorLocked = cursorLocked == false;
+        cursorStarted = false;
         glfwSetInputMode(windowHandle, GLFW_CURSOR, cursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 
@@ -100,5 +113,15 @@ public class EventsGlfwImpl implements Events {
         float deltaY = this.deltaY;
         this.deltaY = 0.f;
         return deltaY;
+    }
+
+    @Override
+    public void addWindowSizeDelegate(WindowSizeDelegate delegate) {
+        windowSizeDelegates.add(delegate);
+    }
+
+    @Override
+    public void removeWindowSizeDelegate(WindowSizeDelegate delegate) {
+        windowSizeDelegates.remove(delegate);
     }
 }
