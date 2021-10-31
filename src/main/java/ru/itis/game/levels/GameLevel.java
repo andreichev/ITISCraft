@@ -21,6 +21,13 @@ public class GameLevel extends LevelBase {
                 "resources/shaders/base/fragment.glsl"
         );
 
+        Entity cameraEntity = world.instantiateEntity();
+        Camera camera = new Camera();
+        cameraEntity.addComponent(camera);
+        camera.setFieldOfView(90.f);
+        camera.setShader(baseShader);
+        cameraEntity.addComponent(new CameraMove());
+
         Entity cube1 = world.instantiateEntity();
         Texture texture1 = new Texture("resources/textures/oak_planks.png");
         Mesh mesh1 = new Mesh(Primitives.createCube(8.f), texture1, baseShader);
@@ -30,14 +37,7 @@ public class GameLevel extends LevelBase {
         Texture texture2 = new Texture("resources/textures/stone.png");
         Mesh mesh2 = new Mesh(Primitives.createCube(8.f), texture2, baseShader);
         cube2.addComponent(mesh2);
-        cube2.getTransform().move(Direction.Forward, 10);
-
-        Entity cameraEntity = world.instantiateEntity();
-        Camera camera = new Camera();
-        cameraEntity.addComponent(camera);
-        camera.setShader(baseShader);
-        camera.setFieldOfView(90.f);
-        cameraEntity.addComponent(new CameraMove());
+        cube2.getTransform().translate(Direction.Forward, 10);
     }
 
     @Override

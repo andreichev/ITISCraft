@@ -6,10 +6,13 @@ import org.joml.Vector4f;
 import ru.itis.gengine.gamelogic.Component;
 import ru.itis.gengine.gamelogic.Direction;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Transform extends Component {
     private final Vector3f rotation;
     private final Vector4f position;
-
+    private final Set<TransformDelegate> delegates;
     /// Переменные для совершения вычислений новой позиции
     private final Matrix4f rotationMatrix;
     private final Vector4f front;
@@ -17,6 +20,7 @@ public class Transform extends Component {
     private final Vector4f right;
 
     public Transform() {
+        delegates = new HashSet<>();
         position = new Vector4f();
         rotation = new Vector3f();
         rotationMatrix = new Matrix4f();
@@ -26,17 +30,15 @@ public class Transform extends Component {
         updateVectors();
     }
 
+    // MARK: - Public methods
+
     public void rotate(float x, float y, float z) {
         rotation.add(x, y, z);
-        rotationMatrix.identity();
-        rotationMatrix.rotate(rotation.x, 1.f, 0.f, 0.f);
-        rotationMatrix.rotate(rotation.y, 0.f, 1.f, 0.f);
-        rotationMatrix.rotate(rotation.z, 0.f, 0.f, 1.f);
-        rotationMatrix.transpose();
         updateVectors();
+        transformUpdated();
     }
 
-    public void move(Direction direction, float speed) {
+    public void translate(Direction direction, float speed) {
         switch (direction) {
             case Forward:
                 position.add(front.mul(speed));
@@ -51,15 +53,20 @@ public class Transform extends Component {
                 position.add(right.mul(speed));
                 break;
         }
+        transformUpdated();
     }
 
-    private void updateVectors() {
-        // front = rotation * unitForward
-        Direction.unitForward.mul(rotationMatrix, front);
-        // right = rotation * unitRight
-        Direction.unitRight.mul(rotationMatrix, right);
-        // up = rotation * unitUp
-        Direction.unitUp.mul(rotationMatrix, up);
+    public void translate(Vector3f amount) {
+        position.add(amount.x, amount.y, amount.z, 1.f);
+        transformUpdated();
+    }
+
+    public void addDelegate(TransformDelegate delegate) {
+        delegates.add(delegate);
+    }
+
+    public void removeDelegate(TransformDelegate delegate) {
+        delegates.remove(delegate);
     }
 
     public Vector4f getFront() {
@@ -80,5 +87,27 @@ public class Transform extends Component {
 
     public Vector3f getRotation() {
         return rotation;
+    }
+
+    // MARK: - Private methods
+    // Обновление нарпавлений векторов
+    private void updateVectors() {
+        rotationMatrix.identity();
+        rotationMatrix.rotate(rotation.x, 1.f, 0.f, 0.f);
+        rotationMatrix.rotate(rotation.y, 0.f, 1.f, 0.f);
+        rotationMatrix.rotate(rotation.z, 0.f, 0.f, 1.f);
+        rotationMatrix.transpose();
+        // front = rotation * unitForward
+        Direction.unitForward.mul(rotationMatrix, front);
+        // right = rotation * unitRight
+        Direction.unitRight.mul(rotationMatrix, right);
+        // up = rotation * unitUp
+        Direction.unitUp.mul(rotationMatrix, up);
+    }
+
+    private void transformUpdated() {
+        for(TransformDelegate delegate: delegates) {
+            delegate.transformChanged(position, rotation);
+        }
     }
 }

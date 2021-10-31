@@ -7,7 +7,7 @@ import ru.itis.gengine.gamelogic.Component;
 import ru.itis.gengine.gamelogic.primitives.PrimitiveMeshData;
 import ru.itis.gengine.renderer.*;
 
-public class Mesh extends Component {
+public class Mesh extends Component implements TransformDelegate {
     private final IndexBuffer indexBuffer;
     private final VertexBuffer vertexBuffer;
     private final Texture texture;
@@ -15,6 +15,8 @@ public class Mesh extends Component {
     private final Matrix4f model;
     private Transform transform;
     private Renderer renderer;
+
+    // MARK: - Init
 
     public Mesh(PrimitiveMeshData primitiveMeshData, Texture texture, Shader shader) {
         this.texture = texture;
@@ -32,10 +34,24 @@ public class Mesh extends Component {
         vertexBuffer = new VertexBuffer(vertices);
     }
 
+    // MARK: - Overridden methods
+
     @Override
     public void initialize() {
         transform = getEntity().getTransform();
         renderer = getEntity().getRenderer();
+        getEntity().getTransform().addDelegate(this);
+    }
+
+    @Override
+    public void update(long deltaTime) {
+        shader.use();
+        shader.use();
+        shader.setUniform("model", model);
+        texture.bind();
+        indexBuffer.bind();
+        vertexBuffer.bind();
+        renderer.drawCall(indexBuffer.getSize());
     }
 
     @Override
@@ -43,19 +59,12 @@ public class Mesh extends Component {
         texture.delete();
         indexBuffer.delete();
         vertexBuffer.delete();
+        transform.removeDelegate(this);
     }
 
-    @Override
-    public void update(long deltaTime) {
-        shader.use();
-        texture.bind();
-        indexBuffer.bind();
-        vertexBuffer.bind();
-        shader.setUniform("model", getModelMatrix());
-        renderer.drawCall(indexBuffer.getSize());
-    }
+    // MARK: - Private methods
 
-    private Matrix4f getModelMatrix() {
+    private void updateModelMatrix() {
         model.identity();
         Vector4f position = transform.getPosition();
         model.translate(position.x, position.y, position.z);
@@ -63,6 +72,12 @@ public class Mesh extends Component {
         model.rotate(rotation.x, 1.f, 0.f, 0.f);
         model.rotate(rotation.y, 0.f, 1.f, 0.f);
         model.rotate(rotation.z, 0.f, 0.f, 1.f);
-        return  model;
+    }
+
+    // MARK: - TransformDelegate
+
+    @Override
+    public void transformChanged(Vector4f position, Vector3f rotation) {
+        updateModelMatrix();
     }
 }

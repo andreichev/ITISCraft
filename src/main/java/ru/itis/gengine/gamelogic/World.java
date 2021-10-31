@@ -10,12 +10,16 @@ public class World {
     private final Events events;
     private final Renderer renderer;
 
+    // MARK: - Init
+
     public World(Window window, Events events, Renderer renderer) {
         this.window = window;
         this.events = events;
         this.renderer = renderer;
         root = new Entity(window, events, renderer);
     }
+
+    // MARK: - Public methods
 
     public void initialize() {
         root.initialize();

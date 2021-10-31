@@ -2,13 +2,14 @@ package ru.itis.gengine.gamelogic.components;
 
 import org.joml.Math;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import ru.itis.gengine.base.GSize;
 import ru.itis.gengine.events.WindowSizeDelegate;
 import ru.itis.gengine.gamelogic.Component;
 import ru.itis.gengine.renderer.Shader;
 
-public class Camera extends Component implements WindowSizeDelegate {
+public class Camera extends Component implements WindowSizeDelegate, TransformDelegate {
     private Vector4f target;
     private Matrix4f view;
     private Matrix4f projection;
@@ -16,6 +17,8 @@ public class Camera extends Component implements WindowSizeDelegate {
     private float fieldOfView;
     private GSize windowSize;
     private Transform transform;
+
+    // MARK: - Overridden methods
 
     @Override
     public void initialize() {
@@ -25,41 +28,28 @@ public class Camera extends Component implements WindowSizeDelegate {
         projection = new Matrix4f();
         transform = getEntity().getTransform();
         getEntity().getEvents().addWindowSizeDelegate(this);
-    }
-
-    @Override
-    public void update(long deltaTime) {
-        // target = position + front
-        transform.getPosition().add(transform.getFront(), target);
-        view.identity();
-        view.lookAt(
-                transform.getPosition().x, transform.getPosition().y, transform.getPosition().z,
-                target.x, target.y, target.z,
-                transform.getUp().x, transform.getUp().y, transform.getUp().z
-        );
-        shader.use();
-        shader.setUniform("view", view);
+        getEntity().getTransform().addDelegate(this);
     }
 
     @Override
     public void terminate() {
         getEntity().getEvents().removeWindowSizeDelegate(this);
+        getEntity().getTransform().removeDelegate(this);
     }
+
+    // MARK: - Public methods
 
     public void setShader(Shader shader) {
         this.shader = shader;
+        updateProjectionMatrix();
+        updateViewMatrix();
     }
 
     public void setFieldOfView(float degrees) {
         fieldOfView = degrees;
-        updateProjectionMatrix();
     }
 
-    @Override
-    public void sizeChanged(GSize size) {
-        windowSize = size;
-        updateProjectionMatrix();
-    }
+    // MARK: - Private methods
 
     private void updateProjectionMatrix() {
         projection.identity();
@@ -70,5 +60,34 @@ public class Camera extends Component implements WindowSizeDelegate {
         );
         shader.use();
         shader.setUniform("projection", projection);
+    }
+
+    private void updateViewMatrix() {
+        // target = position + front
+        Vector4f position = transform.getPosition();
+        position.add(transform.getFront(), target);
+        view.identity();
+        view.lookAt(
+                position.x, position.y, position.z,
+                target.x, target.y, target.z,
+                transform.getUp().x, transform.getUp().y, transform.getUp().z
+        );
+        shader.use();
+        shader.setUniform("view", view);
+    }
+
+    // MARK: - WindowSizeDelegate
+
+    @Override
+    public void sizeChanged(GSize size) {
+        windowSize = size;
+        updateProjectionMatrix();
+    }
+
+    // MARK: - TransformDelegate
+
+    @Override
+    public void transformChanged(Vector4f position, Vector3f rotation) {
+        updateViewMatrix();
     }
 }
