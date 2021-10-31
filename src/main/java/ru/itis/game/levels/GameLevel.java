@@ -12,9 +12,11 @@ import ru.itis.gengine.renderer.Shader;
 import ru.itis.gengine.renderer.Texture;
 
 public class GameLevel extends LevelBase {
+    Shader baseShader;
+
     @Override
     public void start(World world) {
-        Shader baseShader = new Shader(
+        baseShader = new Shader(
                 "resources/shaders/base/vertex.glsl",
                 "resources/shaders/base/fragment.glsl"
         );
@@ -39,5 +41,7 @@ public class GameLevel extends LevelBase {
     }
 
     @Override
-    public void terminate() {}
+    public void terminate() {
+        baseShader.delete();
+    }
 }
