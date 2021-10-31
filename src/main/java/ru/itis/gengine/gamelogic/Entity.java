@@ -43,7 +43,7 @@ public class Entity {
         }
     }
 
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         // Обновить дочерние сущности
         for (Entity entity : childEntities) {
             entity.update(deltaTime);

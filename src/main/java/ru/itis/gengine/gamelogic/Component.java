@@ -19,5 +19,5 @@ public abstract class Component {
 
     public void terminate() {}
 
-    public void update(long deltaTime) {}
+    public void update(double deltaTime) {}
 }

@@ -1,4 +1,4 @@
-package ru.itis.gengine.gamelogic;
+package ru.itis.gengine.base;
 
 import org.joml.Vector4f;
 

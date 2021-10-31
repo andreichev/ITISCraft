@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import ru.itis.gengine.gamelogic.Component;
-import ru.itis.gengine.gamelogic.Direction;
+import ru.itis.gengine.base.Direction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,27 +38,44 @@ public class Transform extends Component {
         transformUpdated();
     }
 
-    public void translate(Direction direction, float speed) {
+    // Сдвиг объекта относительно себя в заданном направлении
+    public void translate(Direction direction, float units) {
         switch (direction) {
             case Forward:
-                position.add(front.mul(speed));
+                position.add(front.mul(units));
                 break;
             case Backward:
-                position.sub(front.mul(speed));
+                position.sub(front.mul(units));
                 break;
             case Left:
-                position.sub(right.mul(speed));
+                position.sub(right.mul(units));
                 break;
             case Right:
-                position.add(right.mul(speed));
+                position.add(right.mul(units));
                 break;
         }
         transformUpdated();
     }
 
-    public void translate(Vector3f amount) {
-        position.add(amount.x, amount.y, amount.z, 1.f);
+    public void translate(float x, float y, float z) {
+        position.add(x, y, z, 1.f);
         transformUpdated();
+    }
+
+    public void setPosition(float x, float y, float z) {
+        position.x = x;
+        position.y = y;
+        position.z = z;
+        position.w = 1.f;
+        transformUpdated();
+    }
+
+    public Vector4f getPosition() {
+        return position;
+    }
+
+    public Vector3f getRotation() {
+        return rotation;
     }
 
     public void addDelegate(TransformDelegate delegate) {
@@ -81,16 +98,8 @@ public class Transform extends Component {
         return up;
     }
 
-    public Vector4f getPosition() {
-        return position;
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
     // MARK: - Private methods
-    // Обновление нарпавлений векторов
+    // Обновление нарпавлений единичных векторов
     private void updateVectors() {
         rotationMatrix.identity();
         rotationMatrix.rotate(rotation.x, 1.f, 0.f, 0.f);

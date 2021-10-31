@@ -3,12 +3,12 @@ package ru.itis.game.components;
 import ru.itis.gengine.events.Events;
 import ru.itis.gengine.events.Key;
 import ru.itis.gengine.gamelogic.Component;
-import ru.itis.gengine.gamelogic.Direction;
+import ru.itis.gengine.base.Direction;
 import ru.itis.gengine.gamelogic.components.Transform;
 
 public class CameraMove extends Component {
-    public float mouseSpeed = 0.01f;
-    public float moveSpeed = 0.01f;
+    public float mouseSpeed = 10.0f;
+    public float moveSpeed = 3.0f;
 
     private Transform transform;
     private Events events;
@@ -20,21 +20,25 @@ public class CameraMove extends Component {
     }
 
     @Override
-    public void update(long deltaTime) {
+    public void update(double deltaTime) {
         if(events.isKeyPressed(Key.W)) {
-            transform.translate(Direction.Forward, moveSpeed * deltaTime);
+            transform.translate(Direction.Forward, moveSpeed * (float) deltaTime);
         }
         if(events.isKeyPressed(Key.S)) {
-            transform.translate(Direction.Backward, moveSpeed * deltaTime);
+            transform.translate(Direction.Backward, moveSpeed * (float) deltaTime);
         }
         if(events.isKeyPressed(Key.A)) {
-            transform.translate(Direction.Left, moveSpeed * deltaTime);
+            transform.translate(Direction.Left, moveSpeed * (float) deltaTime);
         }
         if(events.isKeyPressed(Key.D)) {
-            transform.translate(Direction.Right, moveSpeed * deltaTime);
+            transform.translate(Direction.Right, moveSpeed * (float) deltaTime);
         }
         if (events.isCursorLocked()) {
-            transform.rotate(events.getDeltaY() * mouseSpeed * deltaTime, events.getDeltaX() * 0.01f, 0.f);
+            transform.rotate(
+                    events.getDeltaY() * mouseSpeed * (float) deltaTime,
+                    events.getDeltaX() * mouseSpeed * (float) deltaTime,
+                    0.f
+            );
         }
     }
 }

@@ -1,7 +1,6 @@
 package ru.itis.game.levels;
 
 import ru.itis.game.components.CameraMove;
-import ru.itis.gengine.gamelogic.Direction;
 import ru.itis.gengine.gamelogic.Entity;
 import ru.itis.gengine.gamelogic.LevelBase;
 import ru.itis.gengine.gamelogic.World;
@@ -27,17 +26,18 @@ public class GameLevel extends LevelBase {
         camera.setFieldOfView(90.f);
         camera.setShader(baseShader);
         cameraEntity.addComponent(new CameraMove());
+        cameraEntity.getTransform().translate(0.f, 0.f, 1.3f);
 
         Entity cube1 = world.instantiateEntity();
         Texture texture1 = new Texture("resources/textures/oak_planks.png");
-        Mesh mesh1 = new Mesh(Primitives.createCube(8.f), texture1, baseShader);
+        Mesh mesh1 = new Mesh(Primitives.createCube(1.f), texture1, baseShader);
         cube1.addComponent(mesh1);
 
         Entity cube2 = world.instantiateEntity();
         Texture texture2 = new Texture("resources/textures/stone.png");
-        Mesh mesh2 = new Mesh(Primitives.createCube(8.f), texture2, baseShader);
+        Mesh mesh2 = new Mesh(Primitives.createCube(1.f), texture2, baseShader);
         cube2.addComponent(mesh2);
-        cube2.getTransform().translate(Direction.Forward, 10);
+        cube2.getTransform().translate(1.f, 0.f, 0.f);
     }
 
     @Override

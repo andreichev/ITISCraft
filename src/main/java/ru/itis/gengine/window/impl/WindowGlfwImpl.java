@@ -85,13 +85,9 @@ public class WindowGlfwImpl implements Window {
         glfwSetErrorCallback(null).free();
     }
 
-    public GSize getWindowSize() {
-        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
-        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
-        glfwGetWindowSize(windowHandle, widthBuffer, heightBuffer);
-        int width = widthBuffer.get(0);
-        int height = heightBuffer.get(0);
-        return new GSize((float) width, (float) height);
+    @Override
+    public double getTime() {
+        return glfwGetTime();
     }
 
     @Override
@@ -107,6 +103,15 @@ public class WindowGlfwImpl implements Window {
     @Override
     public void swapBuffers() {
         glfwSwapBuffers(windowHandle);
+    }
+
+    public GSize getWindowSize() {
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        glfwGetWindowSize(windowHandle, widthBuffer, heightBuffer);
+        int width = widthBuffer.get(0);
+        int height = heightBuffer.get(0);
+        return new GSize((float) width, (float) height);
     }
 
     public long getWindowHandle() {

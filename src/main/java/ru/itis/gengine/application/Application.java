@@ -17,6 +17,7 @@ public class Application {
     private Renderer renderer;
     private World world;
     private LevelBase currentLevel;
+    private double time;
 
     public void run(ApplicationStartupSettings applicationStartupSettings) {
         initialize(applicationStartupSettings);
@@ -43,11 +44,15 @@ public class Application {
         events.initialize();
         world = new World(window, events, renderer);
         renderer.initialize();
+        time = window.getTime();
         settings.getStartupLevel().start(world);
     }
 
     private void loop() {
         while (window.isShouldClose() == false) {
+            double deltaTime = window.getTime() - time;
+            time = window.getTime();
+
             renderer.clear();
             if(events.isKeyPressed(Key.ESCAPE)) {
                 window.setShouldClose(true);
@@ -56,7 +61,7 @@ public class Application {
                 events.toggleCursorLock();
             }
 
-            world.update(1);
+            world.update(deltaTime);
             renderer.checkForErrors();
             window.swapBuffers();
             events.pollEvents();
