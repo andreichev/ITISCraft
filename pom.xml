@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <mainClass>ru.itis.itiscraft.Main</mainClass>
+        <mainClass>ru.itis.game.Main</mainClass>
     </properties>
 
     <profiles>
@@ -137,7 +137,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.itis.itiscraft.Main</mainClass>
+                            <mainClass>ru.itis.game.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
