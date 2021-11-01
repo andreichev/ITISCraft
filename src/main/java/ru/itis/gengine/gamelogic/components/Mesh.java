@@ -44,7 +44,7 @@ public class Mesh extends Component implements TransformDelegate {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(float deltaTime) {
         shader.use();
         shader.use();
         shader.setUniform("model", model);

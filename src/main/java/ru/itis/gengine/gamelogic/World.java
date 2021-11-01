@@ -29,7 +29,7 @@ public class World {
         root.terminate();
     }
 
-    public void update(double deltaTime) {
+    public void update(float deltaTime) {
         root.update(deltaTime);
     }
 

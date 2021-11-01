@@ -20,23 +20,23 @@ public class CameraMove extends Component {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(float deltaTime) {
         if(events.isKeyPressed(Key.W)) {
-            transform.translate(Direction.Forward, moveSpeed * (float) deltaTime);
+            transform.translate(Direction.Forward, moveSpeed * deltaTime);
         }
         if(events.isKeyPressed(Key.S)) {
-            transform.translate(Direction.Backward, moveSpeed * (float) deltaTime);
+            transform.translate(Direction.Backward, moveSpeed * deltaTime);
         }
         if(events.isKeyPressed(Key.A)) {
-            transform.translate(Direction.Left, moveSpeed * (float) deltaTime);
+            transform.translate(Direction.Left, moveSpeed * deltaTime);
         }
         if(events.isKeyPressed(Key.D)) {
-            transform.translate(Direction.Right, moveSpeed * (float) deltaTime);
+            transform.translate(Direction.Right, moveSpeed * deltaTime);
         }
         if (events.isCursorLocked()) {
             transform.rotate(
-                    events.getDeltaY() * mouseSpeed * (float) deltaTime,
-                    events.getDeltaX() * mouseSpeed * (float) deltaTime,
+                    events.getDeltaY() * mouseSpeed * deltaTime,
+                    events.getDeltaX() * mouseSpeed * deltaTime,
                     0.f
             );
         }

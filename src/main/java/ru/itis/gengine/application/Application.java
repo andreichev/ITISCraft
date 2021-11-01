@@ -18,6 +18,11 @@ public class Application {
     private World world;
     private LevelBase currentLevel;
     private double time;
+    private float timeCount;
+    private int fps;
+    private int fpsCount;
+    private int ups;
+    private int upsCount;
 
     public void run(ApplicationStartupSettings applicationStartupSettings) {
         initialize(applicationStartupSettings);
@@ -50,8 +55,21 @@ public class Application {
 
     private void loop() {
         while (window.isShouldClose() == false) {
-            double deltaTime = window.getTime() - time;
+            float deltaTime = (float) window.getTime() - (float) time;
             time = window.getTime();
+            timeCount += deltaTime;
+            fpsCount++;
+            upsCount++;
+            if (timeCount > 1f) {
+                fps = fpsCount;
+                System.out.println("FPS: "+ fps);
+                fpsCount = 0;
+
+                ups = upsCount;
+                upsCount = 0;
+
+                timeCount -= 1.f;
+            }
 
             renderer.clear();
             if(events.isKeyPressed(Key.ESCAPE)) {
