@@ -33,6 +33,7 @@ public class Transform extends Component {
     // MARK: - Public methods
 
     public void rotate(float x, float y, float z) {
+        if(x == 0 && y == 0 && z == 0) { return; }
         rotation.add(x, y, z);
         updateVectors();
         transformUpdated();
@@ -40,24 +41,26 @@ public class Transform extends Component {
 
     // Сдвиг объекта относительно себя в заданном направлении
     public void translate(Direction direction, float units) {
+        if(units == 0) { return; }
         switch (direction) {
             case Forward:
-                position.add(front.mul(units));
+                position.add(front.x * units, front.y * units, front.z * units,0.f);
                 break;
             case Backward:
-                position.sub(front.mul(units));
+                position.sub(front.x * units, front.y * units, front.z * units,0.f);
                 break;
             case Left:
-                position.sub(right.mul(units));
+                position.sub(right.x * units, right.y * units, right.z * units,0.f);
                 break;
             case Right:
-                position.add(right.mul(units));
+                position.add(right.x * units, right.y * units, right.z * units,0.f);
                 break;
         }
         transformUpdated();
     }
 
     public void translate(float x, float y, float z) {
+        if(x == 0 && y == 0 && z == 0) { return; }
         position.add(x, y, z, 1.f);
         transformUpdated();
     }

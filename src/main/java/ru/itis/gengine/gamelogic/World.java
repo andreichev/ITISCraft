@@ -51,4 +51,8 @@ public class World {
     public Events getEvents() {
         return events;
     }
+
+    public Renderer getRenderer() {
+        return renderer;
+    }
 }

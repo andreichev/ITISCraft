@@ -87,6 +87,7 @@ public class WindowGlfwImpl implements Window {
 
     @Override
     public double getTime() {
+        // return System.nanoTime() / 1.0E9;
         return glfwGetTime();
     }
 

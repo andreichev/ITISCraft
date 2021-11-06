@@ -16,7 +16,10 @@ public class Renderer {
         glEnable(GL_CULL_FACE);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+    }
+
+    public void setClearColor(float r, float g, float b, float a) {
+        glClearColor(r, g, b, a);
     }
 
     public void clear() {

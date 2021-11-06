@@ -18,11 +18,14 @@ public class Application {
     private World world;
     private LevelBase currentLevel;
     private double time;
-    private float timeCount;
+    // Таймер до 1 секудны для подсчета FPS
+    private float oneSecondTimeCount;
     private int fps;
-    private int fpsCount;
-    private int ups;
-    private int upsCount;
+    private int thisSecondFramesCount;
+    // Ограничение по FPS
+    private int maximumFps;
+    // Время после отрисовки предыдущего кадра
+    private float deltaTime;
 
     public void run(ApplicationStartupSettings applicationStartupSettings) {
         initialize(applicationStartupSettings);
@@ -41,6 +44,7 @@ public class Application {
     private Application() {}
 
     private void initialize(ApplicationStartupSettings settings) {
+        maximumFps = 60;
         renderer = new Renderer();
         WindowGlfwImpl windowGlfw = new WindowGlfwImpl();
         window = windowGlfw;
@@ -55,20 +59,19 @@ public class Application {
 
     private void loop() {
         while (window.isShouldClose() == false) {
-            float deltaTime = (float) window.getTime() - (float) time;
+            double lastTime = time;
             time = window.getTime();
-            timeCount += deltaTime;
-            fpsCount++;
-            upsCount++;
-            if (timeCount > 1f) {
-                fps = fpsCount;
-                System.out.println("FPS: "+ fps);
-                fpsCount = 0;
+            deltaTime += (float) time - (float) lastTime;
+            if(deltaTime - (1.f / maximumFps) < 0) {
+                continue;
+            }
+            oneSecondTimeCount += deltaTime;
 
-                ups = upsCount;
-                upsCount = 0;
-
-                timeCount -= 1.f;
+            thisSecondFramesCount++;
+            if (oneSecondTimeCount > 1f) {
+                fps = thisSecondFramesCount;
+                thisSecondFramesCount = 0;
+                oneSecondTimeCount -= 1.f;
             }
 
             renderer.clear();
@@ -80,6 +83,7 @@ public class Application {
             }
 
             world.update(deltaTime);
+            deltaTime = 0.f;
             renderer.checkForErrors();
             window.swapBuffers();
             events.pollEvents();

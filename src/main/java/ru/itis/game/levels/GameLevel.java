@@ -15,6 +15,7 @@ public class GameLevel extends LevelBase {
 
     @Override
     public void start(World world) {
+        world.getRenderer().setClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         baseShader = new Shader(
                 "resources/shaders/base/vertex.glsl",
                 "resources/shaders/base/fragment.glsl"
@@ -23,21 +24,33 @@ public class GameLevel extends LevelBase {
         Entity cameraEntity = world.instantiateEntity();
         Camera camera = new Camera();
         cameraEntity.addComponent(camera);
-        camera.setFieldOfView(90.f);
+        camera.setFieldOfView(70.f);
         camera.setShader(baseShader);
         cameraEntity.addComponent(new CameraMove());
         cameraEntity.getTransform().translate(0.f, 0.f, 1.3f);
 
-        Entity cube1 = world.instantiateEntity();
         Texture texture1 = new Texture("resources/textures/oak_planks.png");
+        Texture texture2 = new Texture("resources/textures/stone.png");
+
+        Entity cube1 = world.instantiateEntity();
         Mesh mesh1 = new Mesh(Primitives.createCube(1.f), texture1, baseShader);
         cube1.addComponent(mesh1);
+        cube1.getTransform().translate(0.f, 0.f, 0.f);
 
         Entity cube2 = world.instantiateEntity();
-        Texture texture2 = new Texture("resources/textures/stone.png");
         Mesh mesh2 = new Mesh(Primitives.createCube(1.f), texture2, baseShader);
         cube2.addComponent(mesh2);
-        cube2.getTransform().translate(1.f, 0.f, 0.f);
+        cube2.getTransform().translate(1.f, 1.f, 0.f);
+
+        Entity cube3 = world.instantiateEntity();
+        Mesh mesh3 = new Mesh(Primitives.createCube(1.f), texture2, baseShader);
+        cube3.addComponent(mesh3);
+        cube3.getTransform().translate(2.f, 1.f, 0.f);
+
+        Entity cube4 = world.instantiateEntity();
+        Mesh mesh4 = new Mesh(Primitives.createCube(1.f), texture2, baseShader);
+        cube4.addComponent(mesh4);
+        cube4.getTransform().translate(-1.f, 0.f, 0.f);
     }
 
     @Override

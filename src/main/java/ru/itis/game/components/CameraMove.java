@@ -7,7 +7,7 @@ import ru.itis.gengine.base.Direction;
 import ru.itis.gengine.gamelogic.components.Transform;
 
 public class CameraMove extends Component {
-    public float mouseSpeed = 10.0f;
+    public float mouseSpeed = 1.0f;
     public float moveSpeed = 3.0f;
 
     private Transform transform;
