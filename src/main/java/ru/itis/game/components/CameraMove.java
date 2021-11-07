@@ -7,7 +7,7 @@ import ru.itis.gengine.base.Direction;
 import ru.itis.gengine.gamelogic.components.Transform;
 
 public class CameraMove extends Component {
-    public float mouseSpeed = 1.0f;
+    public float mouseSpeed = 0.005f;
     public float moveSpeed = 3.0f;
 
     private Transform transform;
@@ -34,9 +34,11 @@ public class CameraMove extends Component {
             transform.translate(Direction.Right, moveSpeed * deltaTime);
         }
         if (events.isCursorLocked()) {
+            // DeltaX - смещение мыши за реальное время, поэтому умножение на deltaTime не требуется.
+            // Действия в реальном мире не нужно умножать на deltaTime, умножать нужно только действия в игровом мире.
             transform.rotate(
-                    events.getDeltaY() * mouseSpeed * deltaTime,
-                    events.getDeltaX() * mouseSpeed * deltaTime,
+                    events.getDeltaY() * mouseSpeed,
+                    events.getDeltaX() * mouseSpeed,
                     0.f
             );
         }
