@@ -28,91 +28,59 @@ public class VoxelMeshGenerator {
                     float light;
 
                     // Front
-                    light = 1.0f;
-                    verticesList.add(new Vertex(x, y, z + 1.0f, u, v + uvSize, light));
-                    verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u + uvSize, v + uvSize, light));  // 1
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 2
-                    verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u, v, light));  // 3
+                    if(isAir(x, y, z + 1, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 1.0f;
+                        verticesList.add(new Vertex(x, y, z + 1.0f, u, v + uvSize, light));
+                        verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u + uvSize, v + uvSize, light));  // 1
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 2
+                        verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u, v, light));  // 3
+                    }
                     // Back
-                    light = 0.75f;
-                    verticesList.add(new Vertex(x, y, z, u + uvSize, v + uvSize, light)); // 4
-                    verticesList.add(new Vertex(x, y + 1.0f, z, u + uvSize, v, light));  // 5
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u, v, light));   // 6
-                    verticesList.add(new Vertex(x + 1.0f, y, z, u, v + uvSize, light)); // 7
+                    if(isAir(x, y, z - 1, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 0.75f;
+                        verticesList.add(new Vertex(x, y, z, u + uvSize, v + uvSize, light)); // 4
+                        verticesList.add(new Vertex(x, y + 1.0f, z, u + uvSize, v, light));  // 5
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u, v, light));   // 6
+                        verticesList.add(new Vertex(x + 1.0f, y, z, u, v + uvSize, light)); // 7
+                    }
                     // Top
-                    light = 0.95f;
-                    verticesList.add(new Vertex(x, y + 1.0f, z, u, v + uvSize, light)); // 8
-                    verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u + uvSize, v + uvSize, light));  // 11
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 10
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u, v, light));  // 9
+                    if(isAir(x, y + 1, z, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 0.95f;
+                        verticesList.add(new Vertex(x, y + 1.0f, z, u, v + uvSize, light)); // 8
+                        verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u + uvSize, v + uvSize, light));  // 11
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 10
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u, v, light));  // 9
+                    }
                     // Bottom
-                    light = 0.85f;
-                    verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 12
-                    verticesList.add(new Vertex(x + 1.0f, y, z, u + uvSize, v + uvSize, light));  // 13
-                    verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u + uvSize, v, light));   // 14
-                    verticesList.add(new Vertex(x, y, z + 1.0f, u, v, light));  // 15
+                    if(isAir(x, y - 1, z, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 0.85f;
+                        verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 12
+                        verticesList.add(new Vertex(x + 1.0f, y, z, u + uvSize, v + uvSize, light));  // 13
+                        verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u + uvSize, v, light));   // 14
+                        verticesList.add(new Vertex(x, y, z + 1.0f, u, v, light));  // 15
+                    }
                     // Right
-                    light = 0.9f;
-                    verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 16
-                    verticesList.add(new Vertex(x, y, z + 1.0f, u + uvSize, v + uvSize, light));  // 17
-                    verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 18
-                    verticesList.add(new Vertex(x, y + 1.0f, z, u, v, light));  // 19
+                    if(isAir(x - 1, y, z, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 0.9f;
+                        verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 16
+                        verticesList.add(new Vertex(x, y, z + 1.0f, u + uvSize, v + uvSize, light));  // 17
+                        verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u + uvSize, v, light));   // 18
+                        verticesList.add(new Vertex(x, y + 1.0f, z, u, v, light));  // 19
+                    }
                     // Left
-                    light = 0.8f;
-                    verticesList.add(new Vertex(x + 1.0f, y, z, u + uvSize, v + uvSize, light)); // 20
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u + uvSize, v, light));  // 23
-                    verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u, v, light));   // 22
-                    verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u, v + uvSize, light));   // 21
-
-                    int indexOffset = verticesList.size();
-
-                    // Front
-                    indicesList.add(indexOffset);
-                    indicesList.add(indexOffset + 1);
-                    indicesList.add(indexOffset + 2);
-                    indicesList.add(indexOffset + 2);
-                    indicesList.add(indexOffset + 3);
-                    indicesList.add(indexOffset);
-
-                    // Back
-                    indicesList.add(indexOffset + 4);
-                    indicesList.add(indexOffset + 5);
-                    indicesList.add(indexOffset + 6);
-                    indicesList.add(indexOffset + 6);
-                    indicesList.add(indexOffset + 7);
-                    indicesList.add(indexOffset + 4);
-
-                    // Top
-                    indicesList.add(indexOffset + 8);
-                    indicesList.add(indexOffset + 9);
-                    indicesList.add(indexOffset + 10);
-                    indicesList.add(indexOffset + 10);
-                    indicesList.add(indexOffset + 11);
-                    indicesList.add(indexOffset + 8);
-
-                    // Bottom
-                    indicesList.add(indexOffset + 12);
-                    indicesList.add(indexOffset + 13);
-                    indicesList.add(indexOffset + 14);
-                    indicesList.add(indexOffset + 14);
-                    indicesList.add(indexOffset + 15);
-                    indicesList.add(indexOffset + 12);
-
-                    // Left
-                    indicesList.add(indexOffset + 16);
-                    indicesList.add(indexOffset + 17);
-                    indicesList.add(indexOffset + 18);
-                    indicesList.add(indexOffset + 18);
-                    indicesList.add(indexOffset + 19);
-                    indicesList.add(indexOffset + 16);
-
-                    // Right
-                    indicesList.add(indexOffset + 20);
-                    indicesList.add(indexOffset + 21);
-                    indicesList.add(indexOffset + 22);
-                    indicesList.add(indexOffset + 22);
-                    indicesList.add(indexOffset + 23);
-                    indicesList.add(indexOffset + 20);
+                    if(isAir(x + 1, y, z, chunk)) {
+                        addFaceIndices(verticesList.size(), indicesList);
+                        light = 0.8f;
+                        verticesList.add(new Vertex(x + 1.0f, y, z, u + uvSize, v + uvSize, light)); // 20
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u + uvSize, v, light));  // 23
+                        verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z + 1.0f, u, v, light));   // 22
+                        verticesList.add(new Vertex(x + 1.0f, y, z + 1.0f, u, v + uvSize, light));   // 21
+                    }
                 }
             }
         }
@@ -126,5 +94,22 @@ public class VoxelMeshGenerator {
             vertices[i] = verticesList.get(i);
         }
         return new Mesh(vertices, indices, texture, shader);
+    }
+
+    private static void addFaceIndices(int offset, List<Integer> indicesList) {
+        indicesList.add(offset);
+        indicesList.add(offset + 1);
+        indicesList.add(offset + 2);
+        indicesList.add(offset + 2);
+        indicesList.add(offset + 3);
+        indicesList.add(offset);
+    }
+
+    private static boolean isAir(int x, int y, int z, Chunk chunk) {
+        if(x < 0 || y < 0 || z < 0) { return true; }
+        if(x >= chunk.data.length) { return true; }
+        if(y >= chunk.data[x].length) { return true; }
+        if(z >= chunk.data[x][y].length) { return true; }
+        return chunk.data[x][y][z].id == 0;
     }
 }
