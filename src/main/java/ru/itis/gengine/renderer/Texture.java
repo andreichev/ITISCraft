@@ -26,7 +26,7 @@ public class Texture {
             IntBuffer channelsCountBuffer = stack.mallocInt(1);
 
             /* Load image */
-            stbi_set_flip_vertically_on_load(true);
+            // stbi_set_flip_vertically_on_load(true);
             image = stbi_load(path, widthBuffer, heightBuffer, channelsCountBuffer, 4);
             if (image == null) {
                 throw new RuntimeException("Failed to load a texture file!"

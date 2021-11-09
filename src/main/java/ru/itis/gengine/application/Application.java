@@ -11,6 +11,7 @@ import ru.itis.gengine.window.impl.WindowGlfwImpl;
 
 public class Application {
     public static final Application shared = new Application();
+    public int fps;
 
     private Window window;
     private Events events;
@@ -20,7 +21,6 @@ public class Application {
     private double time;
     // Таймер до 1 секудны для подсчета FPS
     private float oneSecondTimeCount;
-    private int fps;
     private int thisSecondFramesCount;
     // Ограничение по FPS
     private int maximumFps;
@@ -70,6 +70,7 @@ public class Application {
             thisSecondFramesCount++;
             if (oneSecondTimeCount > 1f) {
                 fps = thisSecondFramesCount;
+                // System.out.println("FPS: " + fps);
                 thisSecondFramesCount = 0;
                 oneSecondTimeCount -= 1.f;
             }

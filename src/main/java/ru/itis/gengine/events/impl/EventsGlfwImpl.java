@@ -100,6 +100,8 @@ public class EventsGlfwImpl implements Events {
     public void toggleCursorLock() {
         cursorLocked = cursorLocked == false;
         cursorStarted = false;
+        deltaX = 0.f;
+        deltaY = 0.f;
         glfwSetInputMode(windowHandle, GLFW_CURSOR, cursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 

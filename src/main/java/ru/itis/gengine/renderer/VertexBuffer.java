@@ -1,6 +1,6 @@
 package ru.itis.gengine.renderer;
 
-import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 
@@ -13,18 +13,15 @@ public class VertexBuffer {
     public VertexBuffer(Vertex[] vertices) {
         id = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, id);
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            FloatBuffer buffer = stack.mallocFloat(vertices.length * 6);
-            for (Vertex vertex : vertices) {
-                buffer
-                        .put(vertex.pos.x).put(vertex.pos.y).put(vertex.pos.z)
-                        .put(vertex.texCoords.x).put(vertex.texCoords.y)
-                        .put(vertex.light);
-            }
-            buffer.flip();
-            glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(vertices.length * 6);
+        for (Vertex vertex : vertices) {
+            buffer
+                    .put(vertex.pos.x).put(vertex.pos.y).put(vertex.pos.z)
+                    .put(vertex.texCoords.x).put(vertex.texCoords.y)
+                    .put(vertex.light);
         }
-
+        buffer.flip();
+        glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
         layout = new VertexBufferLayout();
         layout.pushFloat(3);
         layout.pushFloat(2);

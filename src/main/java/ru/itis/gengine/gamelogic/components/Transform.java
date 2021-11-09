@@ -3,8 +3,8 @@ package ru.itis.gengine.gamelogic.components;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import ru.itis.gengine.gamelogic.Component;
 import ru.itis.gengine.base.Direction;
+import ru.itis.gengine.gamelogic.Component;
 
 import java.util.HashSet;
 import java.util.Set;

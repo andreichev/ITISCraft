@@ -8,15 +8,15 @@ public class Vertex {
     Vector2f texCoords;
     float light;
 
-    public Vertex(Vector3f pos, Vector2f texCoords, float light) {
+    public Vertex(Vector3f pos, Vector2f uv, float light) {
         this.pos = pos;
-        this.texCoords = texCoords;
+        this.texCoords = uv;
         this.light = light;
     }
 
-    public Vertex(float posX, float posY, float posZ, float texCoordX, float texCoordY, float light) {
-        this.pos = new Vector3f(posX, posY, posZ);
-        this.texCoords = new Vector2f(texCoordX, texCoordY);
+    public Vertex(float x, float y, float z, float u, float v, float light) {
+        this.pos = new Vector3f(x, y, z);
+        this.texCoords = new Vector2f(u, v);
         this.light = light;
     }
 }
