@@ -2,16 +2,14 @@ package ru.itis.game.other;
 
 import ru.itis.game.model.Chunk;
 import ru.itis.game.model.Voxel;
-import ru.itis.gengine.gamelogic.components.Mesh;
-import ru.itis.gengine.renderer.Shader;
-import ru.itis.gengine.renderer.Texture;
+import ru.itis.gengine.gamelogic.primitives.MeshData;
 import ru.itis.gengine.renderer.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VoxelMeshGenerator {
-    public Mesh generate(Chunk chunk, Shader shader) {
+    public static MeshData generate(Chunk chunk) {
         List<Vertex> verticesList = new ArrayList<>();
         List<Integer> indicesList = new ArrayList<>();
         for (int x = 0; x < Chunk.SIZE_X; x++) {
@@ -84,7 +82,6 @@ public class VoxelMeshGenerator {
                 }
             }
         }
-        Texture texture = new Texture("resources/textures/Texture.png");
         int[] indices = new int[indicesList.size()];
         for(int i = 0; i < indicesList.size(); i++) {
             indices[i] = indicesList.get(i);
@@ -93,7 +90,7 @@ public class VoxelMeshGenerator {
         for(int i = 0; i < verticesList.size(); i++) {
             vertices[i] = verticesList.get(i);
         }
-        return new Mesh(vertices, indices, texture, shader);
+        return new MeshData(vertices, indices);
     }
 
     private static void addFaceIndices(int offset, List<Integer> indicesList) {

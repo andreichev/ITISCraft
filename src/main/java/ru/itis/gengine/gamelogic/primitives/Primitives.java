@@ -3,7 +3,7 @@ package ru.itis.gengine.gamelogic.primitives;
 import ru.itis.gengine.renderer.Vertex;
 
 public class Primitives {
-    public static PrimitiveMeshData createCube(float SIZE) {
+    public static MeshData createCube(float SIZE) {
         Vertex[] vertices = {
                 // Front
                 new Vertex(-SIZE / 2.0f, -SIZE / 2.0f, SIZE / 2.0f, 0.0f, 1.0f, 1.f), // 0
@@ -46,6 +46,6 @@ public class Primitives {
                 20, 21, 22, 22, 23, 20  // Right
         };
 
-        return new PrimitiveMeshData(vertices, indices);
+        return new MeshData(vertices, indices);
     }
 }
