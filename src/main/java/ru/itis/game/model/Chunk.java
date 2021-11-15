@@ -1,6 +1,6 @@
 package ru.itis.game.model;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 public class Chunk {

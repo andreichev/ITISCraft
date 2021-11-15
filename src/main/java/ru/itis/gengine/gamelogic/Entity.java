@@ -1,6 +1,6 @@
 package ru.itis.gengine.gamelogic;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import ru.itis.gengine.events.Events;
 import ru.itis.gengine.gamelogic.components.Transform;
 import ru.itis.gengine.renderer.Renderer;
