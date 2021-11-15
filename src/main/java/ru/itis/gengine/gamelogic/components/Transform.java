@@ -55,6 +55,11 @@ public class Transform extends Component {
             case Right:
                 position.add(right.x * units, right.y * units, right.z * units,0.f);
                 break;
+            case Up:
+                position.add(up.x * units, up.y * units, up.z * units, 0.f);
+                break;
+            case Down:
+                position.sub(up.x * units, up.y * units, up.z * units, 0.f);
         }
         transformUpdated();
     }

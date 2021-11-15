@@ -33,7 +33,13 @@ public class CameraMove extends Component {
         if(events.isKeyPressed(Key.D)) {
             transform.translate(Direction.Right, moveSpeed * deltaTime);
         }
-        if (events.isCursorLocked()) {
+        if(events.isKeyPressed(Key.SPACE)) {
+            transform.translate(Direction.Up, moveSpeed * deltaTime);
+        }
+        if(events.isKeyPressed(Key.LEFT_SHIFT)) {
+            transform.translate(Direction.Down, moveSpeed * deltaTime);
+        }
+        if (!events.isCursorLocked()) {
             // DeltaX - смещение мыши за реальное время, поэтому умножение на deltaTime не требуется.
             // Действия в реальном мире не нужно умножать на deltaTime, умножать нужно только действия в игровом мире.
             transform.rotate(
