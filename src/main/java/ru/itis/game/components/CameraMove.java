@@ -21,25 +21,27 @@ public class CameraMove extends Component {
 
     @Override
     public void update(float deltaTime) {
-        if(events.isKeyPressed(Key.W)) {
-            transform.translate(Direction.Forward, moveSpeed * deltaTime);
+        float speed = moveSpeed * deltaTime;
+
+        if (events.isKeyPressed(Key.W)) {
+            transform.translate(Direction.Forward, speed);
         }
-        if(events.isKeyPressed(Key.S)) {
-            transform.translate(Direction.Backward, moveSpeed * deltaTime);
+        if (events.isKeyPressed(Key.S)) {
+            transform.translate(Direction.Backward, speed);
         }
-        if(events.isKeyPressed(Key.A)) {
-            transform.translate(Direction.Left, moveSpeed * deltaTime);
+        if (events.isKeyPressed(Key.A)) {
+            transform.translate(Direction.Left, speed);
         }
-        if(events.isKeyPressed(Key.D)) {
-            transform.translate(Direction.Right, moveSpeed * deltaTime);
+        if (events.isKeyPressed(Key.D)) {
+            transform.translate(Direction.Right, speed);
         }
-        if(events.isKeyPressed(Key.SPACE)) {
-            transform.translate(Direction.Up, moveSpeed * deltaTime);
+        if (events.isKeyPressed(Key.SPACE)) {
+            transform.translate(Direction.Up, speed);
         }
-        if(events.isKeyPressed(Key.LEFT_SHIFT)) {
-            transform.translate(Direction.Down, moveSpeed * deltaTime);
+        if (events.isKeyPressed(Key.LEFT_SHIFT)) {
+            transform.translate(Direction.Down, speed);
         }
-        if (!events.isCursorLocked()) {
+        if (events.isCursorLocked()) {
             // DeltaX - смещение мыши за реальное время, поэтому умножение на deltaTime не требуется.
             // Действия в реальном мире не нужно умножать на deltaTime, умножать нужно только действия в игровом мире.
             transform.rotate(
