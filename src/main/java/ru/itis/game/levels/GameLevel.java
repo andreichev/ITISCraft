@@ -10,6 +10,7 @@ import ru.itis.gengine.gamelogic.World;
 import ru.itis.gengine.gamelogic.components.Camera;
 import ru.itis.gengine.gamelogic.components.Mesh;
 import ru.itis.gengine.gamelogic.primitives.MeshData;
+import ru.itis.gengine.gamelogic.ui.UICrosshair;
 import ru.itis.gengine.renderer.Shader;
 import ru.itis.gengine.renderer.Texture;
 
@@ -23,6 +24,8 @@ public class GameLevel extends LevelBase {
                 "resources/shaders/base/base_vertex.glsl",
                 "resources/shaders/base/base_fragment.glsl"
         );
+        world.addUiNode(new UICrosshair());
+
         Chunk chunk = new Chunk();
         Entity cameraEntity = world.instantiateEntity();
         Camera camera = new Camera();
@@ -33,7 +36,8 @@ public class GameLevel extends LevelBase {
         BlocksCreation blocksCreation = new BlocksCreation();
         blocksCreation.setChunk(chunk);
         cameraEntity.addComponent(blocksCreation);
-        cameraEntity.getTransform().translate(0.f, 0.f, 1.3f);
+        cameraEntity.getTransform().translate(10f, 15f, -5f);
+        cameraEntity.getTransform().rotate((float) (Math.PI / 4f), (float) Math.PI, 0f);
 
         Entity chunkEntity = world.instantiateEntity();
         MeshData mesh1Data = VoxelMeshGenerator.generate(chunk);
@@ -41,6 +45,7 @@ public class GameLevel extends LevelBase {
         Mesh mesh1 = new Mesh(mesh1Data, false, texture, baseShader);
         blocksCreation.setMesh(mesh1);
         chunkEntity.addComponent(mesh1);
+
     }
 
     @Override

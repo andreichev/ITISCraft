@@ -30,8 +30,12 @@ public class Renderer {
         RendererErrorsHandler.checkForErrorsAndPrint();
     }
 
-    public void drawCall(int indicesCount) {
+    public void drawIndexed(int indicesCount) {
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
+    }
+
+    public void drawLines(int linesCount) {
+        glDrawArrays(GL_LINES, 0, linesCount);
     }
 
     public void terminate() {}

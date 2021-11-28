@@ -8,7 +8,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
-class VertexBufferLayout {
+public class VertexBufferLayout {
     private static class Element {
         int count;
         int type;
@@ -35,22 +35,22 @@ class VertexBufferLayout {
     private int stride = 0;
     private int id;
 
-    void pushFloat(int count) {
+    public void pushFloat(int count) {
         elements.add(new Element(count, GL_FLOAT));
         stride += count * Element.getSizeOfType(GL_FLOAT);
     }
 
-    void pushUnsignedInt(int count) {
+    public void pushUnsignedInt(int count) {
         elements.add(new Element(count, GL_UNSIGNED_INT));
         stride += count * Element.getSizeOfType(GL_UNSIGNED_INT);
     }
 
-    void pushUnsignedByte(int count) {
+    public void pushUnsignedByte(int count) {
         elements.add(new Element(count, GL_UNSIGNED_BYTE));
         stride += count * Element.getSizeOfType(GL_UNSIGNED_BYTE);
     }
 
-    void initializeForRenderer() {
+    public void initializeForRenderer() {
         id = glGenVertexArrays();
         glBindVertexArray(id);
         int pointer = 0;
@@ -61,11 +61,11 @@ class VertexBufferLayout {
         }
     }
 
-    void bind() {
+    public void bind() {
         glBindVertexArray(id);
     }
 
-    void delete() {
+    public void delete() {
         glDeleteVertexArrays(id);
     }
 }

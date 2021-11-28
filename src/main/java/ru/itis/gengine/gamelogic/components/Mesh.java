@@ -49,12 +49,11 @@ public class Mesh extends Component implements TransformDelegate {
     @Override
     public void update(float deltaTime) {
         shader.use();
-        shader.use();
         shader.setUniform("model", model);
         texture.bind();
         indexBuffer.bind();
         vertexBuffer.bind();
-        renderer.drawCall(indexBuffer.getSize());
+        renderer.drawIndexed(indexBuffer.getSize());
     }
 
     @Override

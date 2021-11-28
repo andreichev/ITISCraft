@@ -33,6 +33,32 @@ public class VertexBuffer {
         layout.initializeForRenderer();
     }
 
+    public VertexBuffer(float[] data, boolean isDynamic, VertexBufferLayout layout) {
+        this.isDynamic = isDynamic;
+        this.layout = layout;
+        id = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
+        for (float item : data) {
+            buffer.put(item);
+        }
+        buffer.flip();
+        glBufferData(GL_ARRAY_BUFFER, buffer, isDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+    }
+
+    public void update(float[] data) {
+        if (isDynamic == false) {
+            throw new RuntimeException("Невозможно обновить статичный буфер");
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
+        for (float item : data) {
+            buffer.put(item);
+        }
+        buffer.flip();
+        glBufferData(GL_ARRAY_BUFFER, buffer, GL_DYNAMIC_DRAW);
+    }
+
     public void update(Vertex[] vertices) {
         if (isDynamic == false) {
             throw new RuntimeException("Невозможно обновить статичный буфер");
@@ -51,6 +77,7 @@ public class VertexBuffer {
 
     public void bind() {
         layout.bind();
+        glBindBuffer(GL_ARRAY_BUFFER, id);
     }
 
     public void delete() {

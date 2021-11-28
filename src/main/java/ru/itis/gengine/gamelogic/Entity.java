@@ -20,7 +20,7 @@ public class Entity {
 
     // MARK: - Init
 
-    public Entity(Window window, Events events, Renderer renderer) {
+    Entity(Window window, Events events, Renderer renderer) {
         this.window = window;
         this.events = events;
         this.renderer = renderer;
