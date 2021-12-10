@@ -31,6 +31,7 @@ public class VertexBuffer {
         layout.pushFloat(2);
         layout.pushFloat(1);
         layout.initializeForRenderer();
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public VertexBuffer(float[] data, boolean isDynamic, VertexBufferLayout layout) {
@@ -44,6 +45,8 @@ public class VertexBuffer {
         }
         buffer.flip();
         glBufferData(GL_ARRAY_BUFFER, buffer, isDynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+        layout.initializeForRenderer();
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public void update(float[] data) {
@@ -57,6 +60,7 @@ public class VertexBuffer {
         }
         buffer.flip();
         glBufferData(GL_ARRAY_BUFFER, buffer, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public void update(Vertex[] vertices) {
@@ -73,11 +77,15 @@ public class VertexBuffer {
         }
         buffer.flip();
         glBufferData(GL_ARRAY_BUFFER, buffer, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     public void bind() {
         layout.bind();
-        glBindBuffer(GL_ARRAY_BUFFER, id);
+    }
+
+    public void unbind() {
+        layout.unbind();
     }
 
     public void delete() {

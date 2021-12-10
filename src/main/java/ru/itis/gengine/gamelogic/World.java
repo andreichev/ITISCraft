@@ -19,8 +19,8 @@ public class World {
         this.window = window;
         this.events = events;
         this.renderer = renderer;
-        root = new Entity(window, events, renderer);
         uiRoot = new UIRoot(renderer);
+        root = new Entity(window, events, renderer);
     }
 
     // MARK: - Public methods
@@ -30,8 +30,8 @@ public class World {
     }
 
     public void terminate() {
-        root.terminate();
         uiRoot.terminate();
+        root.terminate();
     }
 
     public void update(float deltaTime) {

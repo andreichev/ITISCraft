@@ -13,8 +13,8 @@ public class UICrosshair extends UINode {
     @Override
     public void initialize() {
         float[] vertices = {
-                -0.1f, -0.1f, 0.1f, 0.1f,
-                0.1f, -0.1f, -0.1f, 0.1f
+                 0.0f,  0.1f,  0.0f, -0.1f,
+                -0.1f,  0.0f,  0.1f,  0.0f
         };
         this.renderer = getRoot().getRenderer();
         crosshairShader = new Shader(
@@ -22,16 +22,16 @@ public class UICrosshair extends UINode {
                 "resources/shaders/base/crosshair_fragment.glsl"
         );
         VertexBufferLayout layout = new VertexBufferLayout();
-        vertexBuffer = new VertexBuffer(vertices, false, layout);
         layout.pushFloat(2);
-        layout.initializeForRenderer();
+        vertexBuffer = new VertexBuffer(vertices, false, layout);
     }
 
     @Override
     public void render() {
-        vertexBuffer.bind();
         crosshairShader.use();
+        vertexBuffer.bind();
         renderer.drawLines(4);
+        vertexBuffer.unbind();
     }
 
     @Override

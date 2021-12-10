@@ -24,13 +24,12 @@ public class GameLevel extends LevelBase {
                 "resources/shaders/base/base_vertex.glsl",
                 "resources/shaders/base/base_fragment.glsl"
         );
-        world.addUiNode(new UICrosshair());
 
         Chunk chunk = new Chunk();
         Entity cameraEntity = world.instantiateEntity();
         Camera camera = new Camera();
         cameraEntity.addComponent(camera);
-        camera.setFieldOfView(70.f);
+        camera.setFieldOfView(60.f);
         camera.setShader(baseShader);
         cameraEntity.addComponent(new CameraMove());
         BlocksCreation blocksCreation = new BlocksCreation();
@@ -46,6 +45,7 @@ public class GameLevel extends LevelBase {
         blocksCreation.setMesh(mesh1);
         chunkEntity.addComponent(mesh1);
 
+        world.addUiNode(new UICrosshair());
     }
 
     @Override

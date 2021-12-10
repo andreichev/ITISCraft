@@ -59,10 +59,15 @@ public class VertexBufferLayout {
             glVertexAttribPointer(i, elements.get(i).count, elements.get(i).type, false, stride, pointer);
             pointer += elements.get(i).count * Element.getSizeOfType(elements.get(i).type);
         }
+        glBindVertexArray(0);
     }
 
     public void bind() {
         glBindVertexArray(id);
+    }
+
+    public void unbind() {
+        glBindVertexArray(0);
     }
 
     public void delete() {

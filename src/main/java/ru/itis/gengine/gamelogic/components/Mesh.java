@@ -51,9 +51,13 @@ public class Mesh extends Component implements TransformDelegate {
         shader.use();
         shader.setUniform("model", model);
         texture.bind();
-        indexBuffer.bind();
+        // Порядок биндингов для OpenGL важен
         vertexBuffer.bind();
+        indexBuffer.bind();
         renderer.drawIndexed(indexBuffer.getSize());
+        texture.unbind();
+        indexBuffer.unbind();
+        vertexBuffer.unbind();
     }
 
     @Override

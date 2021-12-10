@@ -34,8 +34,8 @@ public class Renderer {
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
     }
 
-    public void drawLines(int linesCount) {
-        glDrawArrays(GL_LINES, 0, linesCount);
+    public void drawLines(int pointsCount) {
+        glDrawArrays(GL_LINES, 0, pointsCount);
     }
 
     public void terminate() {}
