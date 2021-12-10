@@ -1,6 +1,7 @@
 package ru.itis.game.other;
 
 import ru.itis.game.model.Chunk;
+import ru.itis.game.model.ChunksStorage;
 import ru.itis.game.model.Voxel;
 import ru.itis.gengine.gamelogic.primitives.MeshData;
 import ru.itis.gengine.renderer.Vertex;
@@ -9,14 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoxelMeshGenerator {
-    public static MeshData generate(Chunk chunk) {
+    public static MeshData makeOneChunkMesh(ChunksStorage chunks, int chunkIndexX, int chunkIndexY, int chunkIndexZ) {
+        Chunk chunk = chunks.chunks[chunkIndexX][chunkIndexY][chunkIndexZ];
         List<Vertex> verticesList = new ArrayList<>();
         List<Integer> indicesList = new ArrayList<>();
-        for (int x = 0; x < Chunk.SIZE_X; x++) {
-            for (int y = 0; y < Chunk.SIZE_Y; y++) {
-                for (int z = 0; z < Chunk.SIZE_Z; z++) {
-                    Voxel currentVoxel = chunk.data[x][y][z];
-                    if(currentVoxel.id == 0) { continue; }
+        for (int voxelIndexX = 0; voxelIndexX < Chunk.SIZE_X; voxelIndexX++) {
+            for (int voxelIndexY = 0; voxelIndexY < Chunk.SIZE_Y; voxelIndexY++) {
+                for (int voxelIndexZ = 0; voxelIndexZ < Chunk.SIZE_Z; voxelIndexZ++) {
+                    int x = voxelIndexX + chunkIndexX * Chunk.SIZE_X;
+                    int y = voxelIndexY + chunkIndexY * Chunk.SIZE_Y;
+                    int z = voxelIndexZ + chunkIndexZ * Chunk.SIZE_Z;
+
+                    Voxel currentVoxel = chunk.get(voxelIndexX, voxelIndexY, voxelIndexZ);
+                    if(currentVoxel == null || currentVoxel.id == 0) { continue; }
 
                     // Размер одной текстуры на карте uv
                     float uvSize = 1.f / 16.f;
@@ -26,7 +32,7 @@ public class VoxelMeshGenerator {
                     float light;
 
                     // Front
-                    if(isAir(x, y, z + 1, chunk)) {
+                    if(isAir(x, y, z + 1, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 1.0f;
                         verticesList.add(new Vertex(x, y, z + 1.0f, u, v + uvSize, light));
@@ -35,7 +41,7 @@ public class VoxelMeshGenerator {
                         verticesList.add(new Vertex(x, y + 1.0f, z + 1.0f, u, v, light));  // 3
                     }
                     // Back
-                    if(isAir(x, y, z - 1, chunk)) {
+                    if(isAir(x, y, z - 1, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 0.75f;
                         verticesList.add(new Vertex(x, y, z, u + uvSize, v + uvSize, light)); // 4
@@ -44,7 +50,7 @@ public class VoxelMeshGenerator {
                         verticesList.add(new Vertex(x + 1.0f, y, z, u, v + uvSize, light)); // 7
                     }
                     // Top
-                    if(isAir(x, y + 1, z, chunk)) {
+                    if(isAir(x, y + 1, z, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 0.95f;
                         verticesList.add(new Vertex(x, y + 1.0f, z, u, v + uvSize, light)); // 8
@@ -53,7 +59,7 @@ public class VoxelMeshGenerator {
                         verticesList.add(new Vertex(x + 1.0f, y + 1.0f, z, u, v, light));  // 9
                     }
                     // Bottom
-                    if(isAir(x, y - 1, z, chunk)) {
+                    if(isAir(x, y - 1, z, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 0.85f;
                         verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 12
@@ -62,7 +68,7 @@ public class VoxelMeshGenerator {
                         verticesList.add(new Vertex(x, y, z + 1.0f, u, v, light));  // 15
                     }
                     // Right
-                    if(isAir(x - 1, y, z, chunk)) {
+                    if(isAir(x - 1, y, z, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 0.9f;
                         verticesList.add(new Vertex(x, y, z, u, v + uvSize, light)); // 16
@@ -71,7 +77,7 @@ public class VoxelMeshGenerator {
                         verticesList.add(new Vertex(x, y + 1.0f, z, u, v, light));  // 19
                     }
                     // Left
-                    if(isAir(x + 1, y, z, chunk)) {
+                    if(isAir(x + 1, y, z, chunks)) {
                         addFaceIndices(verticesList.size(), indicesList);
                         light = 0.8f;
                         verticesList.add(new Vertex(x + 1.0f, y, z, u + uvSize, v + uvSize, light)); // 20
@@ -82,14 +88,8 @@ public class VoxelMeshGenerator {
                 }
             }
         }
-        int[] indices = new int[indicesList.size()];
-        for(int i = 0; i < indicesList.size(); i++) {
-            indices[i] = indicesList.get(i);
-        }
-        Vertex[] vertices = new Vertex[verticesList.size()];
-        for(int i = 0; i < verticesList.size(); i++) {
-            vertices[i] = verticesList.get(i);
-        }
+        int[] indices = indicesList.stream().mapToInt(i -> i).toArray();
+        Vertex[] vertices = verticesList.toArray(new Vertex[0]);
         return new MeshData(vertices, indices);
     }
 
@@ -102,11 +102,9 @@ public class VoxelMeshGenerator {
         indicesList.add(offset);
     }
 
-    private static boolean isAir(int x, int y, int z, Chunk chunk) {
-        if(x < 0 || y < 0 || z < 0) { return true; }
-        if(x >= chunk.data.length) { return true; }
-        if(y >= chunk.data[x].length) { return true; }
-        if(z >= chunk.data[x][y].length) { return true; }
-        return chunk.data[x][y][z].id == 0;
+    private static boolean isAir(int x, int y, int z, ChunksStorage chunks) {
+        Voxel voxel = chunks.getVoxel(x, y, z);
+        if (voxel == null) { return true; }
+        return voxel.id == 0;
     }
 }

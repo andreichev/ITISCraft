@@ -3,6 +3,7 @@ package ru.itis.game.levels;
 import ru.itis.game.components.BlocksCreation;
 import ru.itis.game.components.CameraMove;
 import ru.itis.game.model.Chunk;
+import ru.itis.game.model.ChunksStorage;
 import ru.itis.game.other.VoxelMeshGenerator;
 import ru.itis.gengine.gamelogic.Entity;
 import ru.itis.gengine.gamelogic.LevelBase;
@@ -25,7 +26,16 @@ public class GameLevel extends LevelBase {
                 "resources/shaders/base/base_fragment.glsl"
         );
 
-        Chunk chunk = new Chunk();
+        Chunk[][][] chunks = new Chunk[ChunksStorage.SIZE_X][ChunksStorage.SIZE_Y][ChunksStorage.SIZE_Z];
+        for (int indexX = 0; indexX < ChunksStorage.SIZE_X; indexX++) {
+            for (int indexY = 0; indexY < ChunksStorage.SIZE_Y; indexY++) {
+                for (int indexZ = 0; indexZ < ChunksStorage.SIZE_Z; indexZ++) {
+                    chunks[indexX][indexY][indexZ] = new Chunk();
+                }
+            }
+        }
+        ChunksStorage chunksStorage = new ChunksStorage(chunks);
+
         Entity cameraEntity = world.instantiateEntity();
         Camera camera = new Camera();
         cameraEntity.addComponent(camera);
@@ -33,17 +43,23 @@ public class GameLevel extends LevelBase {
         camera.setShader(baseShader);
         cameraEntity.addComponent(new CameraMove());
         BlocksCreation blocksCreation = new BlocksCreation();
-        blocksCreation.setChunk(chunk);
+        blocksCreation.setChunks(chunksStorage);
         cameraEntity.addComponent(blocksCreation);
         cameraEntity.getTransform().translate(10f, 15f, -5f);
         cameraEntity.getTransform().rotate((float) (Math.PI / 4f), (float) Math.PI, 0f);
 
-        Entity chunkEntity = world.instantiateEntity();
-        MeshData mesh1Data = VoxelMeshGenerator.generate(chunk);
         Texture texture = new Texture("resources/textures/Texture.png");
-        Mesh mesh1 = new Mesh(mesh1Data, false, texture, baseShader);
-        blocksCreation.setMesh(mesh1);
-        chunkEntity.addComponent(mesh1);
+        for (int indexX = 0; indexX < ChunksStorage.SIZE_X; indexX++) {
+            for (int indexY = 0; indexY < ChunksStorage.SIZE_Y; indexY++) {
+                for (int indexZ = 0; indexZ < ChunksStorage.SIZE_Z; indexZ++) {
+                    Entity chunkEntity = world.instantiateEntity();
+                    MeshData meshData = VoxelMeshGenerator.makeOneChunkMesh(chunksStorage, indexX, indexY, indexZ);
+                    Mesh mesh = new Mesh(meshData, false, texture, baseShader);
+                    chunksStorage.chunks[indexX][indexY][indexZ].setMesh(mesh);
+                    chunkEntity.addComponent(mesh);
+                }
+            }
+        }
 
         world.addUiNode(new UICrosshair());
     }

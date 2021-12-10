@@ -2,19 +2,18 @@ package ru.itis.game.components;
 
 import org.joml.Vector4f;
 import ru.itis.game.model.Chunk;
+import ru.itis.game.model.ChunksStorage;
 import ru.itis.game.model.VoxelRaycastData;
 import ru.itis.game.other.VoxelMeshGenerator;
 import ru.itis.gengine.events.Events;
 import ru.itis.gengine.events.MouseButton;
 import ru.itis.gengine.gamelogic.Component;
-import ru.itis.gengine.gamelogic.components.Mesh;
 import ru.itis.gengine.gamelogic.components.Transform;
 import ru.itis.gengine.gamelogic.primitives.MeshData;
 
 public class BlocksCreation extends Component {
     private Transform transform;
-    private Chunk chunk;
-    private Mesh mesh;
+    private ChunksStorage chunks;
     private Events events;
     private final int maximumDistance = 10;
 
@@ -24,32 +23,37 @@ public class BlocksCreation extends Component {
         events = getEntity().getEvents();
     }
 
-    public void setChunk(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
-    public void setMesh(Mesh mesh) {
-        this.mesh = mesh;
+    public void setChunks(ChunksStorage chunks) {
+        this.chunks = chunks;
     }
 
     @Override
     public void update(float deltaTime) {
         Vector4f position = transform.getPosition();
         Vector4f target = transform.getFront();
-        VoxelRaycastData v = chunk.bresenham3D(
+        VoxelRaycastData v = chunks.bresenham3D(
                 position.x, position.y, position.z,
                 target.x, target.y, target.z,
                 maximumDistance
         );
         if (v != null && v.voxel != null) {
             if(events.isMouseButtonJustClicked(MouseButton.LEFT)) {
-                chunk.set(v.end.x + v.normal.x, v.end.y + v.normal.y, v.end.z + v.normal.z, (byte) 7);
-                MeshData primitiveMeshData = VoxelMeshGenerator.generate(chunk);
-                mesh.updateBuffer(primitiveMeshData);
+                int x = v.end.x + v.normal.x;
+                int y = v.end.y + v.normal.y;
+                int z = v.end.z + v.normal.z;
+                chunks.setVoxel(x, y, z, (byte) 7);
+                int chunkIndexX = x / Chunk.SIZE_X;
+                int chunkIndexY = y / Chunk.SIZE_Y;
+                int chunkIndexZ = z / Chunk.SIZE_Z;
+                MeshData primitiveMeshData = VoxelMeshGenerator.makeOneChunkMesh(chunks, chunkIndexX, chunkIndexY ,chunkIndexZ);
+                chunks.chunks[chunkIndexX][chunkIndexY][chunkIndexZ].mesh.updateBuffer(primitiveMeshData);
             } else if(events.isMouseButtonJustClicked(MouseButton.RIGHT)) {
-                chunk.set(v.end.x, v.end.y, v.end.z, (byte) 0);
-                MeshData primitiveMeshData = VoxelMeshGenerator.generate(chunk);
-                mesh.updateBuffer(primitiveMeshData);
+                chunks.setVoxel(v.end.x, v.end.y, v.end.z, (byte) 0x0);
+                int chunkIndexX = v.end.x / Chunk.SIZE_X;
+                int chunkIndexY = v.end.y / Chunk.SIZE_Y;
+                int chunkIndexZ = v.end.z / Chunk.SIZE_Z;
+                MeshData primitiveMeshData = VoxelMeshGenerator.makeOneChunkMesh(chunks, chunkIndexX, chunkIndexY ,chunkIndexZ);
+                chunks.chunks[chunkIndexX][chunkIndexY][chunkIndexZ].mesh.updateBuffer(primitiveMeshData);
             }
         }
     }
