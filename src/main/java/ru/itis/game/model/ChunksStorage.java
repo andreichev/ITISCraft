@@ -8,9 +8,9 @@ public class ChunksStorage {
     public static final int WORLD_SIZE_Y = ChunksStorage.SIZE_Y * Chunk.SIZE_Y;
     public static final int WORLD_SIZE_Z = ChunksStorage.SIZE_Z * Chunk.SIZE_Z;
 
-    public static final int SIZE_X = 10;
-    public static final int SIZE_Y = 3;
-    public static final int SIZE_Z = 10;
+    public static final int SIZE_X = 2;
+    public static final int SIZE_Y = 2;
+    public static final int SIZE_Z = 2;
     public final Chunk[][][] chunks;
 
     public ChunksStorage(Chunk[][][] chunks) {
@@ -20,7 +20,6 @@ public class ChunksStorage {
         for (int x = 0; x < WORLD_SIZE_X; x++) {
             if(x % Chunk.SIZE_X == 0) {
                 c = (float) (Math.random() * 0.5);
-                groundVoxelId = (byte) (Math.random() * 7 + 5);
             }
             for (int y = 0; y < WORLD_SIZE_Y; y++) {
                 for (int z = 0; z < WORLD_SIZE_Z; z++) {
