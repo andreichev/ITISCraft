@@ -123,7 +123,7 @@ public class BlocksCreation extends Component {
     }
 
     private void updateChunk(int chunkIndexX, int chunkIndexY, int chunkIndexZ) {
-        MeshData primitiveMeshData = VoxelMeshGenerator.makeOneChunkMesh(chunks, chunkIndexX, chunkIndexY, chunkIndexZ);
+        MeshData primitiveMeshData = VoxelMeshGenerator.makeOneChunkMesh(chunks, chunkIndexX, chunkIndexY, chunkIndexZ, true);
         chunks.chunks[chunkIndexX][chunkIndexY][chunkIndexZ].mesh.updateBuffer(primitiveMeshData);
     }
 }

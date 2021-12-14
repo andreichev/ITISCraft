@@ -18,8 +18,8 @@ public class UICrosshair extends UINode {
         };
         this.renderer = getRoot().getRenderer();
         crosshairShader = new Shader(
-                "resources/shaders/base/crosshair_vertex.glsl",
-                "resources/shaders/base/crosshair_fragment.glsl"
+                "resources/shaders/crosshair/crosshair_vertex.glsl",
+                "resources/shaders/crosshair/crosshair_fragment.glsl"
         );
         VertexBufferLayout layout = new VertexBufferLayout();
         layout.pushFloat(2);
@@ -30,7 +30,9 @@ public class UICrosshair extends UINode {
     public void render() {
         crosshairShader.use();
         vertexBuffer.bind();
+        renderer.setLineWidth(3f);
         renderer.drawLines(4);
+        renderer.setLineWidth(1f);
         vertexBuffer.unbind();
     }
 

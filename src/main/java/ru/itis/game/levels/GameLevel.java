@@ -53,7 +53,7 @@ public class GameLevel extends LevelBase {
             for (int indexY = 0; indexY < ChunksStorage.SIZE_Y; indexY++) {
                 for (int indexZ = 0; indexZ < ChunksStorage.SIZE_Z; indexZ++) {
                     Entity chunkEntity = world.instantiateEntity();
-                    MeshData meshData = VoxelMeshGenerator.makeOneChunkMesh(chunksStorage, indexX, indexY, indexZ);
+                    MeshData meshData = VoxelMeshGenerator.makeOneChunkMesh(chunksStorage, indexX, indexY, indexZ, true);
                     Mesh mesh = new Mesh(meshData, false, texture, baseShader);
                     chunksStorage.chunks[indexX][indexY][indexZ].setMesh(mesh);
                     chunkEntity.addComponent(mesh);
