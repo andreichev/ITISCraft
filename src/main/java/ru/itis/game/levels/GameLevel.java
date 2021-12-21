@@ -45,7 +45,7 @@ public class GameLevel extends LevelBase {
         BlocksCreation blocksCreation = new BlocksCreation();
         blocksCreation.setChunks(chunksStorage);
         cameraEntity.addComponent(blocksCreation);
-        cameraEntity.getTransform().translate(10f, 15f, -5f);
+        cameraEntity.getTransform().translate(ChunksStorage.WORLD_SIZE_X / 2, ChunksStorage.WORLD_SIZE_Y / 2, ChunksStorage.WORLD_SIZE_Z / 2);
         cameraEntity.getTransform().rotate((float) (Math.PI / 4f), (float) Math.PI, 0f);
 
         Texture texture = new Texture("resources/textures/Texture.png");

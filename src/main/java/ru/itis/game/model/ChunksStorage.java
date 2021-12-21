@@ -2,29 +2,31 @@ package ru.itis.game.model;
 
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
+import ru.itis.game.other.PerlinNoise;
 
 public class ChunksStorage {
     public static final int WORLD_SIZE_X = ChunksStorage.SIZE_X * Chunk.SIZE_X;
     public static final int WORLD_SIZE_Y = ChunksStorage.SIZE_Y * Chunk.SIZE_Y;
     public static final int WORLD_SIZE_Z = ChunksStorage.SIZE_Z * Chunk.SIZE_Z;
 
-    public static final int SIZE_X = 2;
-    public static final int SIZE_Y = 2;
-    public static final int SIZE_Z = 2;
+    public static final int SIZE_X = 10;
+    public static final int SIZE_Y = 4;
+    public static final int SIZE_Z = 10;
     public final Chunk[][][] chunks;
 
     public ChunksStorage(Chunk[][][] chunks) {
         this.chunks = chunks;
-        float c = 0.5f;
         byte groundVoxelId = 12;
+
+        float[][] terrain = new float[WORLD_SIZE_X][WORLD_SIZE_Z];
+        PerlinNoise.generate2D(2, 4, 1.0f, terrain);
+
         for (int x = 0; x < WORLD_SIZE_X; x++) {
-            if(x % Chunk.SIZE_X == 0) {
-                c = (float) (Math.random() * 0.5);
-            }
             for (int y = 0; y < WORLD_SIZE_Y; y++) {
                 for (int z = 0; z < WORLD_SIZE_Z; z++) {
                     byte id;
-                    if (y <= (Math.sin(x * 0.3f) * c + 1.5f) * 5.f) {
+                    int height = (int) (terrain[x][z] * WORLD_SIZE_Y / 2);
+                    if(y < height) {
                         id = groundVoxelId;
                     } else {
                         id = 0;
