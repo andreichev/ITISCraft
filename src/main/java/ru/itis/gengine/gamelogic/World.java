@@ -2,13 +2,12 @@ package ru.itis.gengine.gamelogic;
 
 import ru.itis.gengine.events.Events;
 import ru.itis.gengine.gamelogic.ui.UINode;
-import ru.itis.gengine.gamelogic.ui.UIRoot;
 import ru.itis.gengine.renderer.Renderer;
 import ru.itis.gengine.window.Window;
 
 public class World {
     private final Entity root;
-    private final UIRoot uiRoot;
+    private final UINode uiRoot;
     private final Window window;
     private final Events events;
     private final Renderer renderer;
@@ -19,7 +18,8 @@ public class World {
         this.window = window;
         this.events = events;
         this.renderer = renderer;
-        uiRoot = new UIRoot(renderer);
+        uiRoot = new UINode();
+        uiRoot.configure(renderer, window, events);
         root = new Entity(window, events, renderer);
     }
 
@@ -39,8 +39,8 @@ public class World {
         uiRoot.render();
     }
 
-    public void addUiNode(UINode node) {
-        uiRoot.addSubnode(node);
+    public UINode getUiRoot() {
+        return uiRoot;
     }
 
     public Entity instantiateEntity() {

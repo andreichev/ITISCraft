@@ -5,6 +5,7 @@ import ru.itis.game.components.CameraMove;
 import ru.itis.game.model.Chunk;
 import ru.itis.game.model.ChunksStorage;
 import ru.itis.game.other.VoxelMeshGenerator;
+import ru.itis.gengine.base.GRect;
 import ru.itis.gengine.gamelogic.Entity;
 import ru.itis.gengine.gamelogic.LevelBase;
 import ru.itis.gengine.gamelogic.World;
@@ -12,6 +13,7 @@ import ru.itis.gengine.gamelogic.components.Camera;
 import ru.itis.gengine.gamelogic.components.Mesh;
 import ru.itis.gengine.gamelogic.primitives.MeshData;
 import ru.itis.gengine.gamelogic.ui.UICrosshair;
+import ru.itis.gengine.gamelogic.ui.UIView;
 import ru.itis.gengine.renderer.Shader;
 import ru.itis.gengine.renderer.Texture;
 
@@ -61,7 +63,10 @@ public class GameLevel extends LevelBase {
             }
         }
 
-        world.addUiNode(new UICrosshair());
+        world.getUiRoot().addSubnode(new UICrosshair());
+        world.getUiRoot().addSubnode(new UIView(
+                new GRect(100, 100, 200, 100)
+        ));
     }
 
     @Override

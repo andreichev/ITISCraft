@@ -34,6 +34,10 @@ public class Renderer {
         RendererErrorsHandler.checkForErrorsAndPrint();
     }
 
+    public void draw(int elementsCount) {
+        glDrawArrays(GL_TRIANGLES, 0, elementsCount);
+    }
+
     public void drawIndexed(int indicesCount) {
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
     }

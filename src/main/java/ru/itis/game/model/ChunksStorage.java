@@ -16,7 +16,9 @@ public class ChunksStorage {
 
     public ChunksStorage(Chunk[][][] chunks) {
         this.chunks = chunks;
+        // byte groundVoxelId = 10;
         byte groundVoxelId = 12;
+        byte stoneVoxelId = 8;
 
         float[][] terrain = new float[WORLD_SIZE_X][WORLD_SIZE_Z];
         PerlinNoise.generate2D(2, 4, 1.0f, terrain);
@@ -27,12 +29,9 @@ public class ChunksStorage {
                     byte id;
                     int height = (int) (terrain[x][z] * WORLD_SIZE_Y / 2);
                     if(y < height) {
-                        id = groundVoxelId;
+                        id = y <= 2 ? stoneVoxelId : groundVoxelId;
                     } else {
                         id = 0;
-                    }
-                    if (y <= 2) {
-                        id = 8;
                     }
                     chunks[x / Chunk.SIZE_X][y / Chunk.SIZE_Y][z / Chunk.SIZE_Z]
                             .data[x % Chunk.SIZE_X][y % Chunk.SIZE_Y][z % Chunk.SIZE_Z] = new Voxel(id);

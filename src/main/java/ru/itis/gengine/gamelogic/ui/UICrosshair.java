@@ -1,25 +1,21 @@
 package ru.itis.gengine.gamelogic.ui;
 
-import ru.itis.gengine.renderer.Renderer;
 import ru.itis.gengine.renderer.Shader;
 import ru.itis.gengine.renderer.VertexBuffer;
 import ru.itis.gengine.renderer.VertexBufferLayout;
 
 public class UICrosshair extends UINode {
-    private Shader crosshairShader;
-    private VertexBuffer vertexBuffer;
-    private Renderer renderer;
+    private final Shader crosshairShader;
+    private final VertexBuffer vertexBuffer;
 
-    @Override
-    public void initialize() {
+    public UICrosshair() {
         float[] vertices = {
                  0.0f,  0.1f,  0.0f, -0.1f,
                 -0.1f,  0.0f,  0.1f,  0.0f
         };
-        this.renderer = getRoot().getRenderer();
         crosshairShader = new Shader(
-                "resources/shaders/crosshair/crosshair_vertex.glsl",
-                "resources/shaders/crosshair/crosshair_fragment.glsl"
+                "resources/shaders/ui/crosshair/crosshair_vertex.glsl",
+                "resources/shaders/ui/crosshair/crosshair_fragment.glsl"
         );
         VertexBufferLayout layout = new VertexBufferLayout();
         layout.pushFloat(2);
@@ -27,7 +23,7 @@ public class UICrosshair extends UINode {
     }
 
     @Override
-    public void render() {
+    public void draw() {
         crosshairShader.use();
         vertexBuffer.bind();
         renderer.setLineWidth(3f);
@@ -38,6 +34,7 @@ public class UICrosshair extends UINode {
 
     @Override
     public void terminate() {
+        vertexBuffer.delete();
         crosshairShader.delete();
     }
 }
