@@ -6,22 +6,18 @@ import ru.itis.gengine.renderer.VertexBuffer;
 import ru.itis.gengine.renderer.VertexBufferLayout;
 
 public class UIView extends UINode {
+    // TODO: - Один шейдер на все вьюхи
     private final Shader shader;
     private final VertexBuffer vertexBuffer;
     private GRect frame;
 
+    public UIView() {
+        this(GRect.zero());
+    }
+
     public UIView(GRect frame) {
         this.frame = frame;
-        float [] data = new float[] {
-                1.0f, 1.0f,
-                0.0f, 1.0f,
-                0.0f, 0.0f,
-
-                1.0f, 1.0f,
-                0.0f, 0.0f,
-                1.0f, 0.0f,
-        };
-
+        float [] data = new float[12];
         shader = new Shader(
                 "resources/shaders/ui/uiview/uiview_vertex.glsl",
                 "resources/shaders/ui/uiview/uiview_fragment.glsl"

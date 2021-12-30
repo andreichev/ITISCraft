@@ -39,8 +39,12 @@ public class World {
         uiRoot.render();
     }
 
-    public UINode getUiRoot() {
-        return uiRoot;
+    public void addRootUIElement(UINode node) {
+        uiRoot.addSubnode(node);
+    }
+
+    public void removeRootUIElement(UINode node) {
+        uiRoot.removeSubnode(node);
     }
 
     public Entity instantiateEntity() {

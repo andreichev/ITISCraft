@@ -13,4 +13,13 @@ public class GRect {
         this.origin = new GPoint(x, y);
         this.size = new GSize(width, height);
     }
+
+    public static GRect zero() {
+        return new GRect(0, 0, 0, 0);
+    }
+
+    @Override
+    public String toString() {
+        return "GRect, origin=" + origin + ", size=" + size;
+    }
 }

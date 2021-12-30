@@ -2,6 +2,8 @@ package ru.itis.game.levels;
 
 import ru.itis.game.components.BlocksCreation;
 import ru.itis.game.components.CameraMove;
+import ru.itis.game.components.FullScreenToggle;
+import ru.itis.game.components.ui.UICrosshair;
 import ru.itis.game.model.Chunk;
 import ru.itis.game.model.ChunksStorage;
 import ru.itis.game.other.VoxelMeshGenerator;
@@ -12,7 +14,7 @@ import ru.itis.gengine.gamelogic.World;
 import ru.itis.gengine.gamelogic.components.Camera;
 import ru.itis.gengine.gamelogic.components.Mesh;
 import ru.itis.gengine.gamelogic.primitives.MeshData;
-import ru.itis.gengine.gamelogic.ui.UICrosshair;
+import ru.itis.gengine.gamelogic.ui.UINode;
 import ru.itis.gengine.gamelogic.ui.UIView;
 import ru.itis.gengine.renderer.Shader;
 import ru.itis.gengine.renderer.Texture;
@@ -49,6 +51,7 @@ public class GameLevel extends LevelBase {
         cameraEntity.addComponent(blocksCreation);
         cameraEntity.getTransform().translate(ChunksStorage.WORLD_SIZE_X / 2, ChunksStorage.WORLD_SIZE_Y / 2, ChunksStorage.WORLD_SIZE_Z / 2);
         cameraEntity.getTransform().rotate((float) (Math.PI / 4f), (float) Math.PI, 0f);
+        cameraEntity.addComponent(new FullScreenToggle());
 
         Texture texture = new Texture("resources/textures/Texture.png");
         for (int indexX = 0; indexX < ChunksStorage.SIZE_X; indexX++) {
@@ -63,10 +66,12 @@ public class GameLevel extends LevelBase {
             }
         }
 
-        world.getUiRoot().addSubnode(new UICrosshair());
-        world.getUiRoot().addSubnode(new UIView(
-                new GRect(100, 100, 200, 100)
+        UINode root = new UINode();
+        root.addSubnode(new UICrosshair());
+        root.addSubnode(new UIView(
+                new GRect(50, 500, 200, 50)
         ));
+        world.addRootUIElement(root);
     }
 
     @Override

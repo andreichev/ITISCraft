@@ -5,6 +5,7 @@ import ru.itis.gengine.events.Events;
 import ru.itis.gengine.events.Key;
 import ru.itis.gengine.events.MouseButton;
 import ru.itis.gengine.events.WindowSizeDelegate;
+import ru.itis.gengine.window.Window;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,27 +22,27 @@ public class EventsGlfwImpl implements Events {
     private float y = 0.f;
     private boolean cursorLocked = false;
     private boolean cursorStarted = false;
-    private final long windowHandle;
+    private Window window;
     private final Set<WindowSizeDelegate> windowSizeDelegates = new HashSet<>();
 
     private final int MOUSE_BUTTONS = 1024;
 
-    public EventsGlfwImpl(long windowHandle) {
+    public EventsGlfwImpl() {
         this.keys = new boolean[1032];
         this.frames = new int[1032];
-        this.windowHandle = windowHandle;
     }
 
     @Override
     public void initialize() {
+        long windowHandle = window.getWindowHandle();
         keys = new boolean[1032];
         frames = new int[1032];
 
-        glfwSetKeyCallback(windowHandle, (long window, int key, int scancode, int action, int mode) -> {
+        glfwSetKeyCallback(windowHandle, (long w, int key, int scancode, int action, int mode) -> {
             keys[key] = action == GLFW_PRESS || action == GLFW_REPEAT;
             frames[key] = current;
         });
-        glfwSetCursorPosCallback(windowHandle, (long window, double xPos, double yPos) -> {
+        glfwSetCursorPosCallback(windowHandle, (long w, double xPos, double yPos) -> {
             if (cursorStarted) {
                 deltaX += xPos - x;
                 deltaY += yPos - y;
@@ -51,16 +52,21 @@ public class EventsGlfwImpl implements Events {
             x = (float) xPos;
             y = (float) yPos;
         });
-        glfwSetMouseButtonCallback(windowHandle, (long window, int button, int action, int mode) -> {
+        glfwSetMouseButtonCallback(windowHandle, (long w, int button, int action, int mode) -> {
             keys[MOUSE_BUTTONS + button] = action == GLFW_PRESS || action == GLFW_REPEAT;
             frames[MOUSE_BUTTONS + button] = current;
         });
-        glfwSetWindowSizeCallback(windowHandle, (long window, int width, int height) -> {
+        glfwSetWindowSizeCallback(windowHandle, (long w, int width, int height) -> {
             GSize size = new GSize(width, height);
             for(WindowSizeDelegate delegate: windowSizeDelegates) {
                 delegate.sizeChanged(size);
             }
         });
+    }
+
+    @Override
+    public void setWindow(Window window) {
+        this.window = window;
     }
 
     @Override
@@ -99,10 +105,15 @@ public class EventsGlfwImpl implements Events {
     @Override
     public void toggleCursorLock() {
         cursorLocked = cursorLocked == false;
+        resetCursorPos();
+        glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, cursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
+
+    @Override
+    public void resetCursorPos() {
         cursorStarted = false;
         deltaX = 0.f;
         deltaY = 0.f;
-        glfwSetInputMode(windowHandle, GLFW_CURSOR, cursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 
     @Override

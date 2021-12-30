@@ -15,17 +15,26 @@ public class UINode implements WindowSizeDelegate {
     protected Events events;
     protected Renderer renderer;
     protected GSize windowSize;
+    protected boolean isConfigured;
 
     public UINode() {
         this.subnodes = new ArrayList<>();
+        this.isConfigured = false;
     }
 
+    // MARK: - Public methods
+
     public void configure(Renderer renderer, Window window, Events events) {
+        if (isConfigured) { return; }
+        isConfigured = true;
         this.renderer = renderer;
         this.window = window;
         this.events = events;
         windowSize = window.getWindowSize();
         events.addWindowSizeDelegate(this);
+        for(UINode node: subnodes) {
+            node.configure(renderer, window, events);
+        }
         layout();
     }
 
@@ -33,13 +42,15 @@ public class UINode implements WindowSizeDelegate {
         if(renderer == null) { return; }
         draw();
         for(UINode node: subnodes) {
-            node.draw();
+            node.render();
         }
     }
 
     public void addSubnode(UINode node) {
-        node.configure(renderer, window, events);
         subnodes.add(node);
+        if(isConfigured) {
+            node.configure(renderer, window, events);
+        }
     }
 
     public void removeSubnode(UINode node) {
@@ -52,13 +63,20 @@ public class UINode implements WindowSizeDelegate {
         return subnodes;
     }
 
+    // MARK: - Need to be overriden
+
+    // Вызывается для позиционирования (обновление буфера)
+    public void layout() {}
+    // Вызывается для drawCall. Batching пока не настроен
+    public void draw() {}
+    // Выгрузка буфера, шейдера
+    public void terminate() {}
+
+    // MARK: - WindowSizeDelegate
+
     @Override
     public void sizeChanged(GSize size) {
         windowSize = size;
         layout();
     }
-
-    public void layout() {}
-    public void draw() {}
-    public void terminate() {}
 }

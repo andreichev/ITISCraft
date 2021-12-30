@@ -46,13 +46,15 @@ public class Application {
     private void initialize(ApplicationStartupSettings settings) {
         maximumFps = 60;
         renderer = new Renderer();
-        WindowGlfwImpl windowGlfw = new WindowGlfwImpl();
-        window = windowGlfw;
+        events = new EventsGlfwImpl();
+        window = new WindowGlfwImpl();
+        events.setWindow(window);
+        window.setEvents(events);
+        // Порядок важен
         window.initialize(settings.getWindowTitle(), settings.getWindowSize(), settings.isFullScreen());
-        events = new EventsGlfwImpl(windowGlfw.getWindowHandle());
         events.initialize();
-        world = new World(window, events, renderer);
         renderer.initialize();
+        world = new World(window, events, renderer);
         time = window.getTime();
         settings.getStartupLevel().start(world);
     }

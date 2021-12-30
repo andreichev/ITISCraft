@@ -31,6 +31,12 @@ public class VoxelMeshGenerator {
                     float u = currentVoxel.id % 16.f * uvSize;
                     float v = currentVoxel.id / 16 * uvSize;
 
+                    // Небольшой сдвиг от краев текстуры для того,
+                    // чтобы при mipmapping не было сливания с соседними текстурами
+                    uvSize -= 0.001f;
+                    u += 0.0005f;
+                    v += 0.0005f;
+
                     float light;
                     float a = 0, b = 0, c = 0, d = 0, e = 0, f = 0, g = 0, h = 0;
 

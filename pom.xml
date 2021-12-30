@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <lwjgl.version>3.2.1</lwjgl.version>
+        <lwjgl.version>3.3.0</lwjgl.version>
         <joml.version>1.10.2</joml.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
