@@ -13,8 +13,10 @@ public interface Events {
     boolean isMouseButtonJustClicked(MouseButton button);
     boolean isCursorLocked();
     void toggleCursorLock();
-    void addWindowSizeDelegate(WindowSizeDelegate delegate);
-    void removeWindowSizeDelegate(WindowSizeDelegate delegate);
+    void addWindowSizeListener(WindowSizeListener listener);
+    void removeWindowSizeDelegate(WindowSizeListener listener);
+    void addFrameBufferSizeListener(FrameBufferSizeListener listener);
+    void removeFrameBufferSizeListener(FrameBufferSizeListener listener);
     void resetCursorPos();
     float getDeltaX();
     float getDeltaY();

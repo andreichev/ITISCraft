@@ -1,14 +1,11 @@
 package ru.itis.gengine.events.impl;
 
 import ru.itis.gengine.base.GSize;
-import ru.itis.gengine.events.Events;
-import ru.itis.gengine.events.Key;
-import ru.itis.gengine.events.MouseButton;
-import ru.itis.gengine.events.WindowSizeDelegate;
+import ru.itis.gengine.events.*;
 import ru.itis.gengine.window.Window;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -23,7 +20,8 @@ public class EventsGlfwImpl implements Events {
     private boolean cursorLocked = false;
     private boolean cursorStarted = false;
     private Window window;
-    private final Set<WindowSizeDelegate> windowSizeDelegates = new HashSet<>();
+    private final List<WindowSizeListener> windowSizeListeners = new ArrayList<>();
+    private final List<FrameBufferSizeListener> frameBufferSizeListeners = new ArrayList<>();
 
     private final int MOUSE_BUTTONS = 1024;
 
@@ -58,8 +56,14 @@ public class EventsGlfwImpl implements Events {
         });
         glfwSetWindowSizeCallback(windowHandle, (long w, int width, int height) -> {
             GSize size = new GSize(width, height);
-            for(WindowSizeDelegate delegate: windowSizeDelegates) {
-                delegate.sizeChanged(size);
+            for(WindowSizeListener listener: windowSizeListeners) {
+                listener.sizeChanged(size);
+            }
+        });
+        glfwSetFramebufferSizeCallback(windowHandle, (long w, int width, int height) -> {
+            GSize size = new GSize(width, height);
+            for(FrameBufferSizeListener listener: frameBufferSizeListeners) {
+                listener.sizeChanged(size);
             }
         });
     }
@@ -131,12 +135,22 @@ public class EventsGlfwImpl implements Events {
     }
 
     @Override
-    public void addWindowSizeDelegate(WindowSizeDelegate delegate) {
-        windowSizeDelegates.add(delegate);
+    public void addWindowSizeListener(WindowSizeListener listener) {
+        windowSizeListeners.add(listener);
     }
 
     @Override
-    public void removeWindowSizeDelegate(WindowSizeDelegate delegate) {
-        windowSizeDelegates.remove(delegate);
+    public void removeWindowSizeDelegate(WindowSizeListener listener) {
+        windowSizeListeners.remove(listener);
+    }
+
+    @Override
+    public void addFrameBufferSizeListener(FrameBufferSizeListener listener) {
+        frameBufferSizeListeners.add(listener);
+    }
+
+    @Override
+    public void removeFrameBufferSizeListener(FrameBufferSizeListener listener) {
+        frameBufferSizeListeners.remove(listener);
     }
 }

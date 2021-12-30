@@ -2,14 +2,14 @@ package ru.itis.gengine.gamelogic.ui;
 
 import ru.itis.gengine.base.GSize;
 import ru.itis.gengine.events.Events;
-import ru.itis.gengine.events.WindowSizeDelegate;
+import ru.itis.gengine.events.WindowSizeListener;
 import ru.itis.gengine.renderer.Renderer;
 import ru.itis.gengine.window.Window;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UINode implements WindowSizeDelegate {
+public class UINode implements WindowSizeListener {
     private final List<UINode> subnodes;
     protected Window window;
     protected Events events;
@@ -31,7 +31,7 @@ public class UINode implements WindowSizeDelegate {
         this.window = window;
         this.events = events;
         windowSize = window.getWindowSize();
-        events.addWindowSizeDelegate(this);
+        events.addWindowSizeListener(this);
         for(UINode node: subnodes) {
             node.configure(renderer, window, events);
         }
@@ -72,7 +72,7 @@ public class UINode implements WindowSizeDelegate {
     // Выгрузка буфера, шейдера
     public void terminate() {}
 
-    // MARK: - WindowSizeDelegate
+    // MARK: - WindowSizeListener
 
     @Override
     public void sizeChanged(GSize size) {

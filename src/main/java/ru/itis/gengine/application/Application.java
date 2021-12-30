@@ -2,8 +2,8 @@ package ru.itis.gengine.application;
 
 import ru.itis.gengine.base.GSize;
 import ru.itis.gengine.events.Events;
+import ru.itis.gengine.events.FrameBufferSizeListener;
 import ru.itis.gengine.events.Key;
-import ru.itis.gengine.events.WindowSizeDelegate;
 import ru.itis.gengine.events.impl.EventsGlfwImpl;
 import ru.itis.gengine.gamelogic.LevelBase;
 import ru.itis.gengine.gamelogic.World;
@@ -11,7 +11,7 @@ import ru.itis.gengine.renderer.Renderer;
 import ru.itis.gengine.window.Window;
 import ru.itis.gengine.window.impl.WindowGlfwImpl;
 
-public class Application implements WindowSizeDelegate  {
+public class Application implements FrameBufferSizeListener {
     public static final Application shared = new Application();
     public int fps;
 
@@ -58,7 +58,7 @@ public class Application implements WindowSizeDelegate  {
         renderer.initialize();
         world = new World(window, events, renderer);
         time = window.getTime();
-        events.addWindowSizeDelegate(this);
+        events.addFrameBufferSizeListener(this);
         settings.getStartupLevel().start(world);
     }
 
@@ -105,7 +105,7 @@ public class Application implements WindowSizeDelegate  {
         renderer.terminate();
     }
 
-    // MARK: - Window size delegate
+    // MARK: - Frame buffer size listener
 
     @Override
     public void sizeChanged(GSize size) {

@@ -5,11 +5,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import ru.itis.gengine.base.GSize;
-import ru.itis.gengine.events.WindowSizeDelegate;
+import ru.itis.gengine.events.WindowSizeListener;
 import ru.itis.gengine.gamelogic.Component;
 import ru.itis.gengine.renderer.Shader;
 
-public class Camera extends Component implements WindowSizeDelegate, TransformDelegate {
+public class Camera extends Component implements WindowSizeListener, TransformDelegate {
     private Vector4f target;
     private Matrix4f view;
     private Matrix4f projection;
@@ -27,7 +27,7 @@ public class Camera extends Component implements WindowSizeDelegate, TransformDe
         view = new Matrix4f();
         projection = new Matrix4f();
         transform = getEntity().getTransform();
-        getEntity().getEvents().addWindowSizeDelegate(this);
+        getEntity().getEvents().addWindowSizeListener(this);
         getEntity().getTransform().addDelegate(this);
     }
 
@@ -76,7 +76,7 @@ public class Camera extends Component implements WindowSizeDelegate, TransformDe
         shader.setUniform("view", view);
     }
 
-    // MARK: - WindowSizeDelegate
+    // MARK: - WindowSizeListener
 
     @Override
     public void sizeChanged(GSize size) {
