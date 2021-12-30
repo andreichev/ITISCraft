@@ -6,6 +6,8 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import ru.itis.gengine.base.GSize;
 import ru.itis.gengine.events.Events;
+import ru.itis.gengine.utils.OsCheck;
+import ru.itis.gengine.utils.OsType;
 import ru.itis.gengine.window.Window;
 
 import java.nio.IntBuffer;
@@ -38,12 +40,14 @@ public class WindowGlfwImpl implements Window {
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        if(OsCheck.getOperatingSystemType() == OsType.MacOS) {
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+        }
 
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
         windowHandle = glfwCreateWindow((int) size.width, (int) size.height, title, NULL, NULL);

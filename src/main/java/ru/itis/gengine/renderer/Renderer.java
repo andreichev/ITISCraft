@@ -1,6 +1,7 @@
 package ru.itis.gengine.renderer;
 
 import org.lwjgl.opengl.GL;
+import ru.itis.gengine.base.GSize;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_ALIASED_LINE_WIDTH_RANGE;
@@ -40,6 +41,10 @@ public class Renderer {
 
     public void drawIndexed(int indicesCount) {
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
+    }
+
+    public void setViewportSize(GSize size) {
+        glViewport(0, 0, (int) size.width, (int) size.height);
     }
 
     public void setLineWidth(float width) {

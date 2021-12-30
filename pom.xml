@@ -44,15 +44,15 @@
             </properties>
         </profile>
         <profile>
-            <id>lwjgl-natives-windows-amd64</id>
+            <id>lwjgl-natives-windows-x86</id>
             <activation>
                 <os>
                     <family>windows</family>
-                    <arch>amd64</arch>
+                    <arch>x86</arch>
                 </os>
             </activation>
             <properties>
-                <lwjgl.natives>natives-windows</lwjgl.natives>
+                <lwjgl.natives>natives-windows-x86</lwjgl.natives>
             </properties>
         </profile>
     </profiles>
